@@ -1,6 +1,8 @@
 package fun.madeby.mbfrecipeproject.domain;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
+import java.util.Set;
 
 /**
  * Created by Gra_m on 2022 04 04
@@ -19,12 +21,13 @@ public class Recipe {
     private String source;
     private String url;
     private String directions;
-
     //todo add
     //private Difficulty difficulty;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
+    private Set<Ingredient> ingredients;
     @Lob //ByteLargeObject
     private Byte[] image;
-
     @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
 
