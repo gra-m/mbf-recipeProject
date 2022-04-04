@@ -21,12 +21,11 @@ public class Recipe {
     private String source;
     private String url;
     private String directions;
-    //todo add
-    //private Difficulty difficulty;
-
+    @Enumerated(EnumType.STRING)
+    private Difficulty difficulty;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
     private Set<Ingredient> ingredients;
-    @Lob //ByteLargeObject
+    @Lob
     private Byte[] image;
     @OneToOne(cascade = CascadeType.ALL)
     private Notes notes;
@@ -93,6 +92,22 @@ public class Recipe {
 
     public void setDirections(String directions) {
         this.directions = directions;
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
+    }
+
+    public Set<Ingredient> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(Set<Ingredient> ingredients) {
+        this.ingredients = ingredients;
     }
 
     public Byte[] getImage() {

@@ -1,5 +1,8 @@
 package fun.madeby.mbfrecipeproject.domain;
 
+import org.hibernate.annotations.Fetch;
+import org.springframework.data.repository.cdi.Eager;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -17,7 +20,8 @@ public class Ingredient {
     @Lob
     private String description;
     private BigDecimal amount;
-    //private UnitOfMeasurement uom;
+    @OneToOne(fetch = FetchType.EAGER)//Default but we're being explicit.
+    private UnitOfMeasure uom;
 
     public void setId(Long id) {
         this.id = id;
