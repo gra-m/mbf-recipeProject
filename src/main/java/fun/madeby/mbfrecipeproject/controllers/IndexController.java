@@ -1,13 +1,14 @@
 package fun.madeby.mbfrecipeproject.controllers;
 
-import fun.madeby.mbfrecipeproject.domain.Category;
-import fun.madeby.mbfrecipeproject.domain.UnitOfMeasure;
-import fun.madeby.mbfrecipeproject.repositories.CategoryRepository;
-import fun.madeby.mbfrecipeproject.repositories.UnitOfMeasureRepository;
+import fun.madeby.mbfrecipeproject.domain.Recipe;
+import fun.madeby.mbfrecipeproject.services.h2.RecipeServiceImpl;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by Gra_m on 2022 03 28
@@ -16,23 +17,22 @@ import java.util.Optional;
 @Controller
 public class IndexController {
 
-    private final CategoryRepository CATEGORY_REPOSITORY;
-    private final UnitOfMeasureRepository UNIT_OF_MEASURE_REPOSITORY;
+    final RecipeServiceImpl RECIPE_SERVICE_IMPL;
 
-    public IndexController (
-            CategoryRepository categoryRepository,
-            UnitOfMeasureRepository unitOfMeasureRepository) {
-        this.CATEGORY_REPOSITORY = categoryRepository;
-        this.UNIT_OF_MEASURE_REPOSITORY = unitOfMeasureRepository;
+    public IndexController(
+            RecipeServiceImpl recipe_service_impl) {
+        RECIPE_SERVICE_IMPL = recipe_service_impl;
     }
 
-    @RequestMapping({"", "/", "/index"})
-    public String getIndex(){
-        Optional<Category> categoryOptional = CATEGORY_REPOSITORY.findCategoryByDescription("American");
-        Optional<UnitOfMeasure> uOMOptional = UNIT_OF_MEASURE_REPOSITORY.findUnitOfMeasureByDescription("Pinch");
-        System.out.println("CAT_ID: " + categoryOptional.get().getId());
-        System.out.println("UOM_ID: " + uOMOptional.get().getId());
 
-        return "index";
+    @RequestMapping({"", "/", "/index"})
+    public String getIndex(Model model){
+       ArrayList<Recipe> recipeHashSet = RECIPE_SERVICE_IMPL.findAll();
+      if(recipeHashSet.size() > 0) {
+          model.addAttribute("recipes", recipeHashSet);
+          return "index";
+      }
+        System.out.println("return");
+      return null;
     }
 }

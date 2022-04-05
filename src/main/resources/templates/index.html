@@ -1,11 +1,21 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Recipe Home</title>
+    <meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org">
+    <title>Recipes</title>
 </head>
 <body>
-<h1>My Recipes! Eat pie though, run away, not very tasty..</h1>
+<h2 th:text="'List of Recipes'">Replaced at runtime</h2>
+
+<table class="table table-striped">
+    <tbody>
+    <tr th:each="recipe : ${recipes}">
+        <td th:text="${recipe?.id}">id-placeholder</td>
+        <td th:text="${recipe?.title}">firstName-placeholder</td>
+        <td th:text="${recipe?.description}">lastName-placeholder</td>
+    </tr>
+    </tbody>
+</table>
 
 </body>
 </html>
