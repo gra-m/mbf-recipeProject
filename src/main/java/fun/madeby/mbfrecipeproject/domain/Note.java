@@ -6,16 +6,25 @@ import javax.persistence.*;
  * Created by Gra_m on 2022 04 04
  */
 @Entity
-public class Notes {
+public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Lob // CharacterLargeObject: JPA limit is 255 for a string
-    private String recipeNotes;
+    private String recipeNote;
 
     @OneToOne
     private Recipe recipe;
+
+    public Note() {
+
+    }
+
+    public Note(String recipeNote, Recipe recipe) {
+        this.recipeNote = recipeNote;
+        this.recipe = recipe;
+    }
 
     public Long getId() {
         return id;
@@ -25,12 +34,12 @@ public class Notes {
         this.id = id;
     }
 
-    public String getNotes() {
-        return recipeNotes;
+    public String getNote() {
+        return recipeNote;
     }
 
-    public void setNotes(String notes) {
-        this.recipeNotes = notes;
+    public void setNote(String notes) {
+        this.recipeNote = notes;
     }
 
     public Recipe getRecipe() {

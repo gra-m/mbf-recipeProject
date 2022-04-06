@@ -30,7 +30,7 @@ public class Recipe {
     @Lob
     private Byte[] image;
     @OneToOne(cascade = CascadeType.ALL)
-    private Notes notes;
+    private Note note;
     @ManyToMany
     @JoinTable(
             name = "recipe_category",
@@ -134,12 +134,12 @@ public class Recipe {
         this.image = image;
     }
 
-    public Notes getNotes() {
-        return notes;
+    public Note getNote() {
+        return note;
     }
 
-    public void setNotes(Notes notes) {
-        this.notes = notes;
+    public void setNote(Note note) {
+        this.note = note;
     }
 
     public Set<Category> getCategories() {

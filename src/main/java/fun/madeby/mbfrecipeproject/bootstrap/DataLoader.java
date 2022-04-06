@@ -49,6 +49,8 @@ public class DataLoader implements CommandLineRunner {
     private void BootstrapData() {
         System.out.println("Bootstrapping");
        //GUACOMOLE
+        Recipe recipe = new Recipe();
+
         Ingredient ingredient1 = new Ingredient();
         Ingredient ingredient2 = new Ingredient();
         Ingredient ingredient3 = new Ingredient();
@@ -85,7 +87,15 @@ public class DataLoader implements CommandLineRunner {
         ingredient7.setUom(UNIT_OF_MEASURE_SERVICE.findUnitOfMeasurementByDescription("cup").get());
         ingredient8.setUom(UNIT_OF_MEASURE_SERVICE.findUnitOfMeasurementByDescription("teaspoon").get());
         ingredient9.setUom(UNIT_OF_MEASURE_SERVICE.findUnitOfMeasurementByDescription("teaspoon").get());
-
+        ingredient1.setRecipe(recipe);
+        ingredient2.setRecipe(recipe);
+        ingredient3.setRecipe(recipe);
+        ingredient4.setRecipe(recipe);
+        ingredient5.setRecipe(recipe);
+        ingredient6.setRecipe(recipe);
+        ingredient7.setRecipe(recipe);
+        ingredient8.setRecipe(recipe);
+        ingredient9.setRecipe(recipe);
         Set<Ingredient> guacamoleIngredientSet = new HashSet<>();
         guacamoleIngredientSet.add(ingredient1);
         guacamoleIngredientSet.add(ingredient2);
@@ -100,10 +110,40 @@ public class DataLoader implements CommandLineRunner {
         Set<Category> guacamoleCategorySet = new HashSet<>();
         guacamoleCategorySet.add(CATEGORY_SERVICE.findCategoryByDescription("Mexican").get());
 
-        Recipe recipe = new Recipe();
+        Note note = new Note("If I could give away my most valuable tip on how to be successful in creating " +
+                "dishes, that tip would be: Don’t be afraid to experiment with flavor pairings.\n" +
+                "Case in point: this Spicy Three-Chile Guacamole went from “Oh, that’s nice,” to " +
+                "“Where has this been all my life?!?!”—all it took was a combination of peppers and one humble spice.\n" +
+                "While a three-chile guacamole may seem a bit fiery to your taste buds, rest assured, the creaminess of " +
+                "the avocado base and the smokiness that the charring imparts tones down the heat. Flecks of crisp red " +
+                "onion and the brightness of the cilantro round out the flavors in this dip to ensure your guacamole " +
+                "has a kiss of heat that’s not too overwhelming.\n" +
+                "Which Chiles Are Best?\n" +
+                "A balance of mild and spicy chiles was essential in making this guacamole spicy, but still edible. " +
+                "For me, there’s nothing worse than a dish being so spicy that it hurts you to eat it.\n" +
+                "I used serrano, poblano, and jalapeño chiles. Each has a distinct flavor and varying levels of heat.\n" +
+                "How a Pepper’s Heat Is Measured\n" +
+                "When it comes to how hot a pepper is, the authoritative guide is the Scoville Heat Unit (SHU). " +
+                "With zero being no heat at all and one billion being “I want to die,” the chart is a manual for picking " +
+                "the right heat to use in your recipes.\n" +
+                "The mildest pepper in this Spicy Three-Chile Guacamole is the poblano, with an average of 1,250 SHU. " +
+                "Jalapeños and serranos are spicier, averaging 6,750 SHU and 10,000 SHU, respectively. (Here's a guide " +
+                "to picking the best jalapeños for your spice level!)\n" +
+                "TIP: If you’re just dipping your toes in the chile pool and want to start out mildly, I would recommend" +
+                "using just one of the hotter chiles (either the jalapeño or the serrano) and substitute the other, hotter" +
+                "chile with an Anaheim or ancho, in addition to the poblano.\n" +
+                "These milder chiles have the lowest SHU, coming in at only 1,000. On the flip side, if you’re a chile" +
+                "daredevil and want to ramp up the heat, increase the spice with chile de arbol (15,000 SHU) or pequin" +
+                "chiles (40,000 SHU). You can add these fiery peppers to the milder poblano, but I wouldn’t recommend " +
+                "pairing them with the jalapeños or serranos.\n",
+                recipe);
+
         recipe.setTitle("Spicy Three-Chile Guacomole");
 
-        recipe.setDescription("This is not too long, @Lob not touching H2?");
+        recipe.setDescription("This is not too long, @Lob not touching H2?dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" +
+                "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" +
+                "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" +
+                "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
         recipe.setDirections("This is not too long either now..");
         recipe.setPrepTime(20);
         recipe.setCookTime(0);
@@ -115,7 +155,7 @@ public class DataLoader implements CommandLineRunner {
         recipe.setIngredients(guacamoleIngredientSet);
         recipe.setCategories(guacamoleCategorySet);
         //recipe.setImage("10);
-        //recipe.setNotes("11");
+        recipe.setNote(note);
 
         RECIPE_SERVICE.saveRecipe(recipe);
 
