@@ -1,6 +1,9 @@
 package fun.madeby.mbfrecipeproject.domain;
 
 
+import fun.madeby.mbfrecipeproject.services.h2.UnitOfMeasureServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.*;
 import java.math.BigDecimal;
 
@@ -20,6 +23,20 @@ public class Ingredient {
     private BigDecimal amount;
     @OneToOne(fetch = FetchType.EAGER)//Default but we're being explicit.
     private UnitOfMeasure uom;
+
+    public Ingredient() {
+    }
+
+    public Ingredient(
+            String description,
+            BigDecimal amount,
+            UnitOfMeasure uom,
+            Recipe recipe) {
+        this.description = description;
+        this.amount = amount;
+        this.uom = uom;
+        this.recipe = recipe;
+    }
 
     public void setId(Long id) {
         this.id = id;
