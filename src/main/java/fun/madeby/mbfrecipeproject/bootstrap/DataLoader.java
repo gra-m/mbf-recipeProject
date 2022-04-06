@@ -4,10 +4,12 @@ import fun.madeby.mbfrecipeproject.domain.*;
 import fun.madeby.mbfrecipeproject.services.h2.CategoryServiceImpl;
 import fun.madeby.mbfrecipeproject.services.h2.RecipeServiceImpl;
 import fun.madeby.mbfrecipeproject.services.h2.UnitOfMeasureServiceImpl;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -17,8 +19,8 @@ import java.util.Set;
  */
 
 @Component
-public class DataLoader implements CommandLineRunner {
-
+public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
+    private List<Recipe> recipes = new ArrayList<>(2);
     private final UnitOfMeasureServiceImpl UNIT_OF_MEASURE_SERVICE;
     private final CategoryServiceImpl CATEGORY_SERVICE;
     private final RecipeServiceImpl RECIPE_SERVICE;
@@ -33,22 +35,21 @@ public class DataLoader implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws Exception {
-
+    public void onApplicationEvent(ContextRefreshedEvent event) {
         List<UnitOfMeasure> uOMSet = (List<UnitOfMeasure>) UNIT_OF_MEASURE_SERVICE.findAll();
-
         try {
             if (uOMSet.size() == 0)
                 throw new RuntimeException("data.sql has not initialised");
-                BootstrapData();
+            RECIPE_SERVICE.saveAll(BootstrapData());
         } catch (RuntimeException e) {
             e.printStackTrace();
         }
     }
 
-    private void BootstrapData() {
+
+    private List<Recipe> BootstrapData() {
         System.out.println("Bootstrapping");
-       //GUACOMOLE
+        //GUACOMOLE Original
         Recipe recipe = new Recipe();
 
         Ingredient ingredient1 = new Ingredient();
@@ -73,11 +74,11 @@ public class DataLoader implements CommandLineRunner {
         ingredient2.setAmount(new BigDecimal(4));
         ingredient3.setAmount(new BigDecimal(2));
         ingredient4.setAmount(new BigDecimal(4));
-        ingredient5.setAmount(new BigDecimal(1.5));
-        ingredient6.setAmount(new BigDecimal(.25));
-        ingredient7.setAmount(new BigDecimal(.25));
+        ingredient5.setAmount(new BigDecimal("1.5"));
+        ingredient6.setAmount(new BigDecimal(".25"));
+        ingredient7.setAmount(new BigDecimal(".25"));
         ingredient8.setAmount(new BigDecimal(1));
-        ingredient9.setAmount(new BigDecimal(.75));
+        ingredient9.setAmount(new BigDecimal(".75"));
         ingredient1.setUom(UNIT_OF_MEASURE_SERVICE.findUnitOfMeasurementByDescription("").get());
         ingredient2.setUom(UNIT_OF_MEASURE_SERVICE.findUnitOfMeasurementByDescription("").get());
         ingredient3.setUom(UNIT_OF_MEASURE_SERVICE.findUnitOfMeasurementByDescription("").get());
@@ -110,7 +111,34 @@ public class DataLoader implements CommandLineRunner {
         Set<Category> guacamoleCategorySet = new HashSet<>();
         guacamoleCategorySet.add(CATEGORY_SERVICE.findCategoryByDescription("Mexican").get());
 
-        Note note = new Note("If I could give away my most valuable tip on how to be successful in creating " +
+        Note note = new Note(getRecipe1Note(), recipe);
+        recipe.setTitle("Spicy Three-Chile Guacomole");
+        recipe.setDescription(
+                        "Take your guacamole game from “nice” to “not sharing” with a combination of serrano, poblano," +
+                        " and jalapeño peppers! You'll be so happy after one bite of this spicy, smoky dip. " +
+                        "Doing cartwheels in the middle of a party will seem like a perfectly reasonable thing to do.\n");
+        recipe.setDirections("This is not too long either now..");
+        recipe.setDescription(getRecipe1Description());
+        recipe.setPrepTime(20);
+        recipe.setCookTime(0);
+        recipe.setServings(6);
+        recipe.setSource("5");
+        recipe.setUrl("https://www.simplyrecipes.com/recipes/spicy_three_chile_guacamole/");
+
+        recipe.setDifficulty(Difficulty.EASY);
+        recipe.setIngredients(guacamoleIngredientSet);
+        recipe.setCategories(guacamoleCategorySet);
+        //recipe.setImage("10);
+        recipe.setNote(note);
+
+        recipes.add(recipe);
+        return recipes;
+
+
+    }
+
+        private String getRecipe1Note(){
+        return "If I could give away my most valuable tip on how to be successful in creating " +
                 "dishes, that tip would be: Don’t be afraid to experiment with flavor pairings.\n" +
                 "Case in point: this Spicy Three-Chile Guacamole went from “Oh, that’s nice,” to " +
                 "“Where has this been all my life?!?!”—all it took was a combination of peppers and one humble spice.\n" +
@@ -135,65 +163,39 @@ public class DataLoader implements CommandLineRunner {
                 "These milder chiles have the lowest SHU, coming in at only 1,000. On the flip side, if you’re a chile" +
                 "daredevil and want to ramp up the heat, increase the spice with chile de arbol (15,000 SHU) or pequin" +
                 "chiles (40,000 SHU). You can add these fiery peppers to the milder poblano, but I wouldn’t recommend " +
-                "pairing them with the jalapeños or serranos.\n",
-                recipe);
+                "pairing them with the jalapeños or serranos.\n";
+        }
 
-        recipe.setTitle("Spicy Three-Chile Guacomole");
 
-        recipe.setDescription("This is not too long, @Lob not touching H2?dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" +
-                "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" +
-                "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" +
-                "ddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd");
-        recipe.setDirections("This is not too long either now..");
-        recipe.setPrepTime(20);
-        recipe.setCookTime(0);
-        recipe.setServings(6);
-        recipe.setSource("5");
-        recipe.setUrl("https://www.simplyrecipes.com/recipes/spicy_three_chile_guacamole/");
-
-        recipe.setDifficulty(Difficulty.EASY);
-        recipe.setIngredients(guacamoleIngredientSet);
-        recipe.setCategories(guacamoleCategorySet);
-        //recipe.setImage("10);
-        recipe.setNote(note);
-
-        RECIPE_SERVICE.saveRecipe(recipe);
-
-    }
+        private String getRecipe1Description(){
+        return "Preheat your grill or broiler:\n" +
+                    "Set your oven’s broiler or your grill’s searing compartment to high. Roast the peppers for 7-8 minutes until the skins are charred and blistered, turning the peppers as they begin to shake, and the seeds inside make snapping noises.\n" +
+                    "\n" +
+                    "Guacamole with Chili Peppers - peppers on the grill\n" +
+                    "Guacamole with Chili Peppers - charred peppers on the grill\n" +
+                    "Steam the peppers and remove the skins:\n" +
+                    "Once the peppers have been charred, remove them from the heat. Put the peppers into a shallow dish or bowl and cover them with a towel to steam.\n" +
+                    "\n" +
+                    "After the peppers steam, their skins are easy to remove. Use the back of your knife to scrape the charred, papery skins from the peppers, then discard.\n" +
+                    "\n" +
+                    "Dice the peppers:\n" +
+                    "Once the skins have been removed, slice off the stem end of each pepper. Cut the poblano and jalapeños in half lengthwise, then scrape away the white membrane and the seeds with the back side of your knife (this helps prevent scraping away valuable pepper flesh).\n" +
+                    "\n" +
+                    "Because serrano peppers are so skinny, rather than slice them in half, use the back of your knife blade and drag it down the length of the pepper to push the seeds out from the cut end.\n" +
+                    "\n" +
+                    "Dice the peppers into 1/4-inch pieces.\n" +
+                    "\n" +
+                    "Mash the avocados:\n" +
+                    "Cut the avocados in half and remove, then discard the pits. Scoop the avocado flesh into the mixing bowl and use a fork or potato masher to smash the avocado into a semi-chunky paste.\n" +
+                    "\n" +
+                    "Gently stir in the lime juice to help delay the browning of the avocado. Try to avoid stirring too much as it will break up the avocado.\n" +
+                    "\n" +
+                    "Finish the guacamole:\n" +
+                    "Fold in the chilles, red onion, cilantro, cumin, and salt until the ingredients are well incorporated. Taste the guacamole and adjust the salt to suit your preference.\n" +
+                    "\n" +
+                    "Allow the flavors to meld:\n" +
+                    "Press a piece of plastic wrap against the surface of the guacamole and cover your bowl with a lid. Refrigerate the guacamole for at least 15 minutes to allow the flavors of the chiles and the cumin to meld and deepen.\n" +
+                    "\n" +
+                    "Enjoy the guacamole within 3 days. Store leftovers covered in the refrigerator. If the guacamole browns, scrape off the brown layer and discard before serving.";
+        };
 }
-
-
-/*recipe.setDescription(
-                "Take your guacamole game from “nice” to “not sharing” with a combination of serrano, poblano," +
-                        " and jalapeño peppers! You'll be so happy after one bite of this spicy, smoky dip. " +
-                        "Doing cartwheels in the middle of a party will seem like a perfectly reasonable thing to do.\n");
-        recipe.setDirections("Preheat your grill or broiler:\n" +
-                "Set your oven’s broiler or your grill’s searing compartment to high. Roast the peppers for 7-8 minutes until the skins are charred and blistered, turning the peppers as they begin to shake, and the seeds inside make snapping noises.\n" +
-                "\n" +
-                "Guacamole with Chili Peppers - peppers on the grill\n" +
-                "Guacamole with Chili Peppers - charred peppers on the grill\n" +
-                "Steam the peppers and remove the skins:\n" +
-                "Once the peppers have been charred, remove them from the heat. Put the peppers into a shallow dish or bowl and cover them with a towel to steam.\n" +
-                "\n" +
-                "After the peppers steam, their skins are easy to remove. Use the back of your knife to scrape the charred, papery skins from the peppers, then discard.\n" +
-                "\n" +
-                "Dice the peppers:\n" +
-                "Once the skins have been removed, slice off the stem end of each pepper. Cut the poblano and jalapeños in half lengthwise, then scrape away the white membrane and the seeds with the back side of your knife (this helps prevent scraping away valuable pepper flesh).\n" +
-                "\n" +
-                "Because serrano peppers are so skinny, rather than slice them in half, use the back of your knife blade and drag it down the length of the pepper to push the seeds out from the cut end.\n" +
-                "\n" +
-                "Dice the peppers into 1/4-inch pieces.\n" +
-                "\n" +
-                "Mash the avocados:\n" +
-                "Cut the avocados in half and remove, then discard the pits. Scoop the avocado flesh into the mixing bowl and use a fork or potato masher to smash the avocado into a semi-chunky paste.\n" +
-                "\n" +
-                "Gently stir in the lime juice to help delay the browning of the avocado. Try to avoid stirring too much as it will break up the avocado.\n" +
-                "\n" +
-                "Finish the guacamole:\n" +
-                "Fold in the chiles, red onion, cilantro, cumin, and salt until the ingredients are well incorporated. Taste the guacamole and adjust the salt to suit your preference.\n" +
-                "\n" +
-                "Allow the flavors to meld:\n" +
-                "Press a piece of plastic wrap against the surface of the guacamole and cover your bowl with a lid. Refrigerate the guacamole for at least 15 minutes to allow the flavors of the chiles and the cumin to meld and deepen.\n" +
-                "\n" +
-                "Enjoy the guacamole within 3 days. Store leftovers covered in the refrigerator. If the guacamole browns, scrape off the brown layer and discard before serving.");
-                        */

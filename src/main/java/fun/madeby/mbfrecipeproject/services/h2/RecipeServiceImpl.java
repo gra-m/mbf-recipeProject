@@ -4,10 +4,7 @@ import fun.madeby.mbfrecipeproject.domain.Recipe;
 import fun.madeby.mbfrecipeproject.repositories.RecipeRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by Gra_m on 2022 04 05
@@ -37,5 +34,9 @@ public class RecipeServiceImpl {
     public Recipe saveRecipe(Recipe recipe) {
         Recipe persistedRecipe = RECIPE_REPOSITORY.save(recipe);
         return persistedRecipe;
+    }
+
+    public void saveAll(List<Recipe> recipeList) {
+        RECIPE_REPOSITORY.saveAll(recipeList);
     }
 }
