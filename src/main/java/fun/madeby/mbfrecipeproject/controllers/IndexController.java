@@ -2,18 +2,18 @@ package fun.madeby.mbfrecipeproject.controllers;
 
 import fun.madeby.mbfrecipeproject.domain.Recipe;
 import fun.madeby.mbfrecipeproject.services.h2.RecipeServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by Gra_m on 2022 03 28
  */
 
+@Slf4j
 @Controller
 public class IndexController {
 
@@ -27,6 +27,8 @@ public class IndexController {
 
     @RequestMapping({"", "/", "/index"})
     public String getIndex(Model model){
+        System.out.println("Controller@ '' / or /index");
+        log.debug("Controller@ '' / or /index");
        ArrayList<Recipe> recipeHashSet = RECIPE_SERVICE_IMPL.findAll();
       if(recipeHashSet.size() > 0) {
           model.addAttribute("recipes", recipeHashSet);

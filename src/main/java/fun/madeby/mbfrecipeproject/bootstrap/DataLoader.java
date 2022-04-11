@@ -4,6 +4,7 @@ import fun.madeby.mbfrecipeproject.domain.*;
 import fun.madeby.mbfrecipeproject.services.h2.CategoryServiceImpl;
 import fun.madeby.mbfrecipeproject.services.h2.RecipeServiceImpl;
 import fun.madeby.mbfrecipeproject.services.h2.UnitOfMeasureServiceImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ import java.util.Set;
 /**
  * Created by Gra_m on 2022 04 05
  */
-
+@Slf4j
 @Component
 public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
     private List<Recipe> recipes = new ArrayList<>(2);
@@ -36,6 +37,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
+        log.debug("onApplicationEvent: ContextRefreshedEvent Triggered");
         List<UnitOfMeasure> uOMSet = (List<UnitOfMeasure>) UNIT_OF_MEASURE_SERVICE.findAll();
         try {
             if (uOMSet.size() == 0)
@@ -48,10 +50,10 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
 
 
     private List<Recipe> BootstrapData() {
-        System.out.println("Bootstrapping");
         //GUACOMOLE Original
         Recipe recipe = new Recipe();
-
+        System.out.println("Reassuring message.. Bootstrapping. Prepare for imminent fail..ur..");
+        log.debug("01 Bootstrapping first recipe instantiated");
         Ingredient ingredient1 = new Ingredient();
         Ingredient ingredient2 = new Ingredient();
         Ingredient ingredient3 = new Ingredient();
@@ -184,16 +186,22 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         recipe2.setNote(note2);
         ///////////////
 
+
+
         recipes.add(recipe);
         recipes.add(recipe2);
+        System.out.println("......e");
+        log.debug("02 Bootstrap: Recipes have just been added to the recipes ArrayList");
         return recipes;
     }
 
     private String getRecipe2Description() {
+        log.debug("getRecipe2Description");
         return "Try this Dukkah-Crusted Grilled Chicken! A new spice blend can really be a game changer when dinner time gets boring. Dukkah is a blend of coriander, cumin, and fennel seeds and nuts, and it pairs beautifully with grilled chicken.";
     }
 
     private String getRecipe2Note() {
+        log.debug("getRecipe2Note");
         return "So What Is Dukkah, Exactly?\n" +
                 "The word dukkah is derived from the Arabic word for “pound,” as in “to smash.” The ingredients are broken up into small pieces in a mortar to make a crumbly, spicy mix.\n" +
                 "\n" +
@@ -231,6 +239,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     private String getRecipe2Directions() {
+        log.debug("getRecipe2Directions");
         return "Make the vinaigrette:\n" +
                 "In a blender, puree the lime juice, salt, pepper, oil, honey, and cilantro leaves until smooth. Set aside 3 tablespoons to dress the salad.\n" +
                 "\n" +
@@ -270,6 +279,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     private String getRecipe1Note() {
+        log.debug("getRecipe1Note");
         return "If I could give away my most valuable tip on how to be successful in creating " +
                 "dishes, that tip would be: Don’t be afraid to experiment with flavor pairings.\n" +
                 "Case in point: this Spicy Three-Chile Guacamole went from “Oh, that’s nice,” to " +
@@ -299,6 +309,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
     }
 
     private String getRecipe1Directions() {
+        log.debug("getRecipe1Directions");
         return "Preheat your grill or broiler:\n" +
                 "Set your oven’s broiler or your grill’s searing compartment to high. Roast the peppers for 7-8 minutes until the skins are charred and blistered, turning the peppers as they begin to shake, and the seeds inside make snapping noises.\n" +
                 "\n" +

@@ -1,8 +1,6 @@
 package fun.madeby.mbfrecipeproject.domain;
 
 
-import fun.madeby.mbfrecipeproject.services.h2.UnitOfMeasureServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
