@@ -10,6 +10,8 @@ import java.util.*;
  * Created by Gra_m on 2022 04 05
  */
 
+
+// Todo when playing with tests I saw that JT had this inheriting from a common RecipeService, I played with this notion but, today is about testing..
 @Service
 public class RecipeServiceImpl {
     private final RecipeRepository RECIPE_REPOSITORY;
@@ -30,6 +32,17 @@ public class RecipeServiceImpl {
         }
         return new ArrayList<>();
     }
+
+    // Added so there is some business logic to test.
+    public Set<Recipe> getRecipes() {
+        try {
+            return new HashSet<>((Collection<? extends Recipe>) RECIPE_REPOSITORY.findAll());
+        } catch(RuntimeException e) {
+            e.printStackTrace();
+        }
+        return new HashSet<>();
+    }
+
 
     public Recipe saveRecipe(Recipe recipe) {
         Recipe persistedRecipe = RECIPE_REPOSITORY.save(recipe);

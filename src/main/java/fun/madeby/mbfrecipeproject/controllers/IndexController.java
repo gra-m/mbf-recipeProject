@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  * Created by Gra_m on 2022 03 28
@@ -29,9 +30,9 @@ public class IndexController {
     public String getIndex(Model model){
         System.out.println("Controller@ '' / or /index");
         log.debug("Controller@ '' / or /index");
-       ArrayList<Recipe> recipeHashSet = RECIPE_SERVICE_IMPL.findAll();
-      if(recipeHashSet.size() > 0) {
-          model.addAttribute("recipes", recipeHashSet);
+       ArrayList<Recipe> recipeArrayList = RECIPE_SERVICE_IMPL.findAll();
+      if(recipeArrayList.size() > 0) {
+          model.addAttribute("recipes", recipeArrayList);
           return "index";
       }
         System.out.println("return");
