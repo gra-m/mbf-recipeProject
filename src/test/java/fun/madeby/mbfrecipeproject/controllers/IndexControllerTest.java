@@ -6,7 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.ArgumentMatcher;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -31,6 +30,13 @@ class IndexControllerTest {
     @Mock
     RecipeServiceImpl recipeServiceImpl;
 
+    @Mock
+    Recipe recipeOne;
+
+    @BeforeEach
+    void setUp() {
+        recipeOne = new Recipe();
+    }
 
     // This test is ignoring Single responsibility, it's a bit of a sandbox.
     @Test
@@ -47,9 +53,8 @@ class IndexControllerTest {
         String expectedViewName = "index";
 
         //happy path == returned list has contents
-        Recipe recipe = new Recipe();
         ArrayList<Recipe> recipeArrayList = new ArrayList<>();
-        recipeArrayList.add(recipe);
+        recipeArrayList.add(recipeOne);
         when(recipeServiceImpl.findAll()).thenReturn(recipeArrayList);
         String returnedViewName = controller.getIndex(model);
         assertEquals(expectedViewName, returnedViewName);
@@ -64,11 +69,10 @@ class IndexControllerTest {
     }
 
     @Test
-    void callsToAddAttributeEqualOneWithCorrectListContents() {
+    void callsToAddAttributeEqualOneWithCorrectListContentsAndSize() {
 
-        Recipe recipe = new Recipe();
         ArrayList<Recipe> recipeArrayList = new ArrayList<>();
-        recipeArrayList.add(recipe);
+        recipeArrayList.add(recipeOne);
         when(recipeServiceImpl.findAll()).thenReturn(recipeArrayList);
         controller.getIndex(model);
 
@@ -77,6 +81,9 @@ class IndexControllerTest {
 
         // add attribute only called when list > 0 [happy] be sure to use matcher eq("string").
         verify(model, times(1)).addAttribute(eq("recipes"), argumentCaptor.capture());
+
+        List<Recipe> listInController = argumentCaptor.getValue();
+        assertEquals(1, listInController.size());
 
     }
 
