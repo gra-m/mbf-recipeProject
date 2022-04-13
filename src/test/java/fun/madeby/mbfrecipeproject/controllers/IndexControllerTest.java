@@ -9,8 +9,11 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,12 +36,37 @@ class IndexControllerTest {
     @Mock
     Recipe recipeOne;
 
+    @Mock
+    Recipe recipeTwo;
+
     @BeforeEach
     void setUp() {
         recipeOne = new Recipe();
+        recipeTwo = new Recipe(); // not currently used issue in course
+        recipeTwo.setId(4L);
     }
 
-    // This test is ignoring Single responsibility, it's a bit of a sandbox.
+
+    @Test
+    public void givenControllerIsIndexRequestIsForwardSlashAndReturnIsIndex() throws Exception {
+
+        //Given this MockMvc stand alone (unit test) controller
+        MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        // and given this happy path, return is not empty list
+        ArrayList<Recipe> recipeArrayList = new ArrayList<>();
+        recipeArrayList.add(recipeOne);
+        when(recipeServiceImpl.findAll()).thenReturn(recipeArrayList);
+
+        //When
+        mockMvc.perform(MockMvcRequestBuilders.get("/")) //Then:
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("index"));
+
+    }
+
+
+
+
     @Test
     void getIndexUnhappy() {
 
