@@ -22,3 +22,6 @@ The following guides illustrate how to use some features concretely:
 * [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
 * [Building REST services with Spring](https://spring.io/guides/tutorials/bookmarks/)
 
+Simple #25 will tag/mention that issue in a commit without closing it like:
+
+closes #25
