@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/gra-m/mbf-recipeProject/tree/main.svg?style=svg)](https://circleci.com/gh/gra-m/mbf-recipeProject/tree/main)
+
 # Getting Started
 
 ### Reference Documentation
