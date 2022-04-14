@@ -54,6 +54,7 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!--Note jupiter for Junit 5 not here but added working through intellij-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
