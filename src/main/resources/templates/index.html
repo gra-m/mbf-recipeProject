@@ -1,8 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
-    <meta charset="UTF-8" xmlns:th="http://www.thymeleaf.org">
     <title>Recipes</title>
+    <th:block th:include="fragments/webjars.html :: head-bs"></th:block>
 </head>
 <body>
 <h2 th:text="'List of Recipes'">Replaced at runtime</h2>
@@ -17,5 +20,19 @@
     </tbody>
 </table>
 
+<div class="card">
+    <img class="card-img-top w-50 d-block">
+    <div class="card-body">
+        <h4 class="card-title">Title</h4>
+
+        <p class="card-text">Nullam id dolor id nibh ultricies vehicula ut id elit. Cras justo odio, dapibus ac facilisis
+            in, egestas eget quam. Donec id elit non mi porta gravida at eget metus.</p>
+        <button class="btn btn-primary" type="button">Button</button>
+    </div>
+</div>
+
+
 </body>
+
+<th:block th:include="fragments/webjars.html :: script-bs"></th:block>
 </html>
