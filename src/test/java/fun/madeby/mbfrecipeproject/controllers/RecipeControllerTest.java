@@ -48,7 +48,7 @@ class RecipeControllerTest {
        // and a mockRequest object has been built with this controller.
 
 
-        when(recipeService.findById(anyLong()))
+        when(recipeService.getRecipeById(anyLong()))
                 .thenReturn(recipe1);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/show/1"))
