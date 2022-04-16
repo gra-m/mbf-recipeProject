@@ -1,0 +1,39 @@
+#about-us {
+  /*background-color: var(--bs-yellow);*/
+}
+
+#about-us .col {
+  background-color: rgba(225,225,225,0.75);
+}
+
+#about-us {
+  background-image: url("../../assets/img/GJD_1649.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* color == text */
+
+#page-header {
+  height: 400px;
+  background-image: url("../../assets/img/joshua-coleman-kFRKvJQtNHg-unsplash.jpg");
+  background-position: center -970px;
+  /*background-position: center center;*/
+  /*background-attachment: fixed;*/
+  color: #fff;
+  border-bottom: #eee solid;
+  background-repeat: repeat-x;
+}
+
+#header-overlay {
+  height: 400px;
+  padding-top: 50px;
+  background: black;
+  opacity: 0.4;
+}
+
+#limit-photo-size {
+  max-width: 400px;
+  margin-top: -50px;
+}
+
