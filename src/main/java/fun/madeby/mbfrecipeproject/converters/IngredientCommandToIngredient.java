@@ -11,11 +11,25 @@ import org.springframework.lang.Nullable;
  */
 
 public class IngredientCommandToIngredient implements Converter<IngredientCommand, Ingredient> {
+    private final UnitOfMeasureCommandToUnitOfMeasure UOM_CONVERTER;
+
+    public IngredientCommandToIngredient(UnitOfMeasureCommandToUnitOfMeasure unitOfMeasureCommandToUnitOfMeasure){
+        UOM_CONVERTER = unitOfMeasureCommandToUnitOfMeasure;
+    }
 
     @Synchronized
     @Nullable
     @Override
     public Ingredient convert(IngredientCommand source) {
-        return null;
+        if(source == null)
+            return null;
+
+        Ingredient ingredient = new Ingredient();
+        ingredient.setId(source.getId());
+        ingredient.setDescription(source.getDescription());
+        ingredient.setAmount(source.getAmount());
+        ingredient.setUom(UOM_CONVERTER.convert(source.getUom()));
+
+        return ingredient;
     }
 }
