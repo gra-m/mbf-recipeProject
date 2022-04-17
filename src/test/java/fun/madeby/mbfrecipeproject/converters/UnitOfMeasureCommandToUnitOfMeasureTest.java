@@ -48,11 +48,11 @@ class UnitOfMeasureCommandToUnitOfMeasureTest {
         command.setDescription(DESCRIPTION);
 
         //when
-        UnitOfMeasure uom = converterUnderTest.convert(command);
+        UnitOfMeasure whenDomain = converterUnderTest.convert(command);
 
         //then
-        assertNotNull(uom);
-        assertEquals(LONG_VALUE, uom.getId());
-        assertEquals(DESCRIPTION, uom.getDescription());
+        assertNotNull(whenDomain);
+        assertEquals(LONG_VALUE, whenDomain.getId());
+        assertEquals(DESCRIPTION, whenDomain.getDescription());
     }
 }
