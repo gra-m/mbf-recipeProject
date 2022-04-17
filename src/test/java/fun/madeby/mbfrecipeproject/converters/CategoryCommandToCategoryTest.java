@@ -49,8 +49,7 @@ class CategoryCommandToCategoryTest {
         CategoryCommand givenCommand = new CategoryCommand();
         givenCommand.setId(1L);
         givenCommand.setDescription("description");
-        //givenCommand.setRecipes()
-
+        //givenCommand.setRecipes() //Recipes know Categories but not viceversa
 
         Category whenCategory = converterUnderTest.convert(givenCommand);
 

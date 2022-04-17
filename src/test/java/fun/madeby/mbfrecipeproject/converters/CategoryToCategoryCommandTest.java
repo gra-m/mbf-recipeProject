@@ -46,7 +46,7 @@ class CategoryToCategoryCommandTest {
         Category givenCategory = new Category();
         givenCategory.setId(1L);
         givenCategory.setDescription("description");
-        //givenCategory.setRecipes(); leave for now
+        // recipes know categories
 
         CategoryCommand whenCommand = converterUnderTest.convert(givenCategory);
 
