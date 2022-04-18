@@ -14,7 +14,6 @@ class NoteToNoteCommandTest {
 
     static final Long ID = 1L;
     static final String RECIPE_NOTE = "this is a rather long note that is not worthy of reading yet you if you got this far you did.";
-    static final Recipe RECIPE = new Recipe();
 
     NoteToNoteCommand converterUnderTest;
     Note testDomainObject;
@@ -26,7 +25,7 @@ class NoteToNoteCommandTest {
         testDomainObject = new Note();
         testDomainObject.setId(ID);
         testDomainObject.setRecipeNote(RECIPE_NOTE);
-        //testDomainObject.setRecipe(RECIPE); ??
+        //testDomainObject.setRecipe(RECIPE); Recipe is unknown to Note
     }
 
 
@@ -57,6 +56,5 @@ class NoteToNoteCommandTest {
         assertNotNull(whenCommand);
         assertEquals(ID, whenCommand.getId());
         assertEquals(RECIPE_NOTE, whenCommand.getRecipeNote());
-        //assertEquals(RECIPE, whenCommand.getRecipe()); ??
     }
 }

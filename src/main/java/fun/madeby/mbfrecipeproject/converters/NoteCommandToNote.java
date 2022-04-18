@@ -16,6 +16,13 @@ public class NoteCommandToNote implements Converter<NoteCommand, Note> {
     @Nullable
     @Override
     public Note convert(NoteCommand source) {
-        return null;
+        if (source == null)
+            return null;
+
+        final Note note = new Note();
+        note.setId(source.getId());
+        note.setRecipeNote(source.getRecipeNote());
+
+        return note;
     }
 }
