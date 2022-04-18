@@ -8,6 +8,12 @@
 <head>
     <title>Add Recipe</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <!--for local-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous"
+          th:href="@{/webjars/bootstrap/5.1.3/dist/css/bootstrap.min.css}">
+    <!--still included though handled above-->
     <th:block th:include="fragments/webjars :: head-bs"></th:block>
 </head>
 
@@ -23,16 +29,16 @@
                         <div class="card-body">
                             <h1 class="card-title">Edit Recipe Information</h1>
                             <div class="row">
-                                <div class="col-md-12 form-group">
+                                <div class="col-sm-12 form-group">
                                     <label>Recipe Description:</label>
                                     <input type="text" class="form-control" th:field="*{description}"/>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12 form-group">
+                                <div class="col-sm-12 form-group">
                                     <label>Categories:</label>
                                 </div>
-                                <div class="col-md-12 form-group">
+                                <div class="col-sm-6 form-group">
                                     <div class="radio">
                                         <label>
                                             <input type="checkbox" value=""/>
@@ -48,15 +54,17 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12 form-group">
+                                <div class="col-sm-6 form-group">
                                     <label>Prep Time:</label>
                                     <input type="text" class="form-control" th:field="*{prepTime}"/>
                                 </div>
-                                <div class="col-md-12 form-group">
+                                <div class="col-sm-6 form-group">
                                     <label>Cooktime:</label>
                                     <input type="text" class="form-control" th:field="*{cookTime}"/>
                                 </div>
-                                <div class="col-md-12 form-group">
+                                </div>
+                                <div class="row">
+                                <div class="col-sm-6 form-group">
                                     <label>Difficulty:</label>
                                     <select class="form-control">
                                         <option>Easy</option>
@@ -64,17 +72,17 @@
                                         <option>Hard</option>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12 form-group">
+                                <div class="col-sm-6 form-group">
                                     <label>Servings:</label>
                                     <input type="text" class="form-control" th:field="*{servings}"/>
                                 </div>
-                                <div class="col-md-12 form-group">
+                                    </div>
+                            <div class="row">
+                                <div class="form-group">
                                     <label>Source:</label>
                                     <input type="text" class="form-control" th:field="*{source}"/>
                                 </div>
-                                <div class="col-md-12 form-group">
+                                <div class="form-group">
                                     <label>URL:</label>
                                     <input type="text" class="form-control" th:field="*{url}"/>
                                 </div>
@@ -86,15 +94,15 @@
                     <div class="card">
                             <div class="row">
                                 <div class="card-body">
-                                <div class="col-md-12 ">
+                                <div class="">
                                     <h1 class="card-title">Ingredients</h1>
                                 </div>
-                                <div class="col-md-12">
-                                    <a class="btn btn-default" href="#" role="button">Edit</a>
+                                <div class="row col-md-6 m-sm-auto">
+                                    <a class="btn btn-primary" href="#" role="button">Edit</a>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-12">
+                                <div class="">
                                     <ul>
                                         <li th:remove="all">1 Cup of milk</li>
                                         <li th:remove="all">1 Teaspoon of chocolate</li>
@@ -129,18 +137,22 @@
                                     <textarea class="form-control" rows="3" th:field="*{note.recipeNote}"></textarea>
                                 </div>
                             </div>
+                            <div class="row col-sm-6 m-sm-auto">
+                                <button type="submit" class="btn btn-primary col-md-12">Submit</button>
+                            </div>
                         </div>
                     </div>
-                    </div>
-                    <div class="row col-sm-12">
-                    <button type="submit" class="btn btn-primary col-md-12">Submit</button>
                     </div>
                 </div>
             </form>
         </div>
 
 </body>
-
+<!--for local-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous" th:src="@{/webjars/bootstrap/5.1.3/dist/js/bootstrap.min.js}" ></script>
+<!--Still included though handled above-->
 <th:block th:include="fragments/webjars.html :: script-bs"></th:block>
 </html>
 
