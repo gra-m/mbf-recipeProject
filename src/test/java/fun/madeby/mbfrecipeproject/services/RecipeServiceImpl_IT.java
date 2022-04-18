@@ -4,7 +4,6 @@ import fun.madeby.mbfrecipeproject.commands.RecipeCommand;
 import fun.madeby.mbfrecipeproject.converters.RecipeToRecipeCommand;
 import fun.madeby.mbfrecipeproject.domain.Recipe;
 import fun.madeby.mbfrecipeproject.repositories.RecipeRepository;
-import fun.madeby.mbfrecipeproject.services.RecipeService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,7 @@ class RecipeServiceImpl_IT {
         RecipeCommand detachedRecipeCommand = recipeToRecipeCommand.convert(firstRecipe);
         //when
         detachedRecipeCommand.setDescription(NEW_DESCRIPTION);
-        RecipeCommand savedRecipeCommand = recipeService.savedRecipeCommand(detachedRecipeCommand);
+        RecipeCommand savedRecipeCommand = recipeService.saveRecipeCommand(detachedRecipeCommand);
         //then
         assertNotNull(savedRecipeCommand);
         assertEquals(NEW_DESCRIPTION, savedRecipeCommand.getDescription());
