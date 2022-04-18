@@ -1,10 +1,14 @@
 package fun.madeby.mbfrecipeproject.services.h2;
 
 import fun.madeby.mbfrecipeproject.commands.RecipeCommand;
+import fun.madeby.mbfrecipeproject.converters.RecipeCommandToRecipe;
+import fun.madeby.mbfrecipeproject.converters.RecipeToRecipeCommand;
 import fun.madeby.mbfrecipeproject.domain.Recipe;
 import fun.madeby.mbfrecipeproject.repositories.RecipeRepository;
 import fun.madeby.mbfrecipeproject.services.RecipeService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -12,13 +16,19 @@ import java.util.*;
  * Created by Gra_m on 2022 04 05
  */
 
-
+@Slf4j
 @Service
 public class RecipeServiceImpl implements RecipeService {
     private final RecipeRepository RECIPE_REPOSITORY;
+    private final RecipeCommandToRecipe RECIPE_COMMAND_TO_RECIPE;
+    private final RecipeToRecipeCommand RECIPE_TO_RECIPE_COMMAND;
 
-    public RecipeServiceImpl(RecipeRepository recipe_repository) {
+    public RecipeServiceImpl(RecipeRepository recipe_repository,
+                             RecipeCommandToRecipe recipe_command_to_recipe,
+                             RecipeToRecipeCommand recipe_to_recipe_command) {
         RECIPE_REPOSITORY = recipe_repository;
+        RECIPE_COMMAND_TO_RECIPE = recipe_command_to_recipe;
+        RECIPE_TO_RECIPE_COMMAND = recipe_to_recipe_command;
     }
 
     @Override
@@ -31,8 +41,13 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
+    @Transactional
     public RecipeCommand savedRecipeCommand(RecipeCommand recipeCommand) {
-        return null;
+        Recipe detatchedRecipe = RECIPE_COMMAND_TO_RECIPE.convert(recipeCommand);
+
+        Recipe savedRecipe = RECIPE_REPOSITORY.save(detatchedRecipe);
+        log.debug("Saved Recipe id: " + savedRecipe.getId());
+        return RECIPE_TO_RECIPE_COMMAND.convert(savedRecipe);
     }
 
     @Override
