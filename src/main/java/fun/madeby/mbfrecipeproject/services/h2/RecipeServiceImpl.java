@@ -1,9 +1,11 @@
 package fun.madeby.mbfrecipeproject.services.h2;
 
+import fun.madeby.mbfrecipeproject.commands.RecipeCommand;
 import fun.madeby.mbfrecipeproject.domain.Recipe;
 import fun.madeby.mbfrecipeproject.repositories.RecipeRepository;
 import fun.madeby.mbfrecipeproject.services.RecipeService;
 import org.springframework.stereotype.Service;
+
 import java.util.*;
 
 /**
@@ -14,27 +16,30 @@ import java.util.*;
 @Service
 public class RecipeServiceImpl implements RecipeService {
     private final RecipeRepository RECIPE_REPOSITORY;
+
     public RecipeServiceImpl(RecipeRepository recipe_repository) {
         RECIPE_REPOSITORY = recipe_repository;
     }
 
     @Override
     public Recipe getRecipeById(Long aLong) {
-
         Optional<Recipe> recipeOptional = RECIPE_REPOSITORY.findById(aLong);
-
         if (!recipeOptional.isPresent()) {
             throw new RuntimeException("Recipe Not Found!");
         }
-
         return recipeOptional.get();
+    }
+
+    @Override
+    public RecipeCommand savedRecipeCommand(RecipeCommand recipeCommand) {
+        return null;
     }
 
     @Override
     public Set<Recipe> getRecipes() {
         try {
             return new HashSet<>((Collection<? extends Recipe>) RECIPE_REPOSITORY.findAll());
-        } catch(RuntimeException e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
         return new HashSet<>();
@@ -56,7 +61,7 @@ public class RecipeServiceImpl implements RecipeService {
     public ArrayList<Recipe> findAll() {
         try {
             return (ArrayList<Recipe>) RECIPE_REPOSITORY.findAll();
-        } catch(RuntimeException e) {
+        } catch (RuntimeException e) {
             e.printStackTrace();
         }
         return new ArrayList<>();

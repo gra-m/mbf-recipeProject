@@ -1,5 +1,6 @@
 package fun.madeby.mbfrecipeproject.services;
 
+import fun.madeby.mbfrecipeproject.commands.RecipeCommand;
 import fun.madeby.mbfrecipeproject.domain.Recipe;
 
 import java.util.Set;
@@ -12,6 +13,8 @@ public interface RecipeService {
 
     Set<Recipe> getRecipes();
     Recipe getRecipeById(Long aLong);
+
+    RecipeCommand savedRecipeCommand(RecipeCommand recipeCommand);
 
     //RecipeCommand saveRecipeCommand(RecipeCommand command);
 }

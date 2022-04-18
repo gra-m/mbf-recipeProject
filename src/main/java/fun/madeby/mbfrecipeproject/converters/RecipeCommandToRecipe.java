@@ -7,13 +7,14 @@ import fun.madeby.mbfrecipeproject.domain.Recipe;
 import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.Nullable;
+import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
 /**
  * Created by Gra_m on 2022 04 17
  */
-
+@Component
 public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
 
     final NoteCommandToNote NOTE_COMMAND_TO_NOTE;
