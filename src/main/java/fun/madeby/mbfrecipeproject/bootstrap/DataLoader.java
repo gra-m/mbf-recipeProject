@@ -1,9 +1,9 @@
 package fun.madeby.mbfrecipeproject.bootstrap;
 
 import fun.madeby.mbfrecipeproject.domain.*;
-import fun.madeby.mbfrecipeproject.services.h2.CategoryServiceImpl;
-import fun.madeby.mbfrecipeproject.services.h2.RecipeServiceImpl;
-import fun.madeby.mbfrecipeproject.services.h2.UnitOfMeasureServiceImpl;
+import fun.madeby.mbfrecipeproject.services.CategoryServiceImpl;
+import fun.madeby.mbfrecipeproject.services.RecipeServiceImpl;
+import fun.madeby.mbfrecipeproject.services.UnitOfMeasureServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;

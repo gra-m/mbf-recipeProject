@@ -1,7 +1,7 @@
 package fun.madeby.mbfrecipeproject.controllers;
 
 import fun.madeby.mbfrecipeproject.domain.Recipe;
-import fun.madeby.mbfrecipeproject.services.h2.RecipeServiceImpl;
+import fun.madeby.mbfrecipeproject.services.RecipeServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

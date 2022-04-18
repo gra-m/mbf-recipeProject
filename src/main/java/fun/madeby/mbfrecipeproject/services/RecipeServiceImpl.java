@@ -1,11 +1,10 @@
-package fun.madeby.mbfrecipeproject.services.h2;
+package fun.madeby.mbfrecipeproject.services;
 
 import fun.madeby.mbfrecipeproject.commands.RecipeCommand;
 import fun.madeby.mbfrecipeproject.converters.RecipeCommandToRecipe;
 import fun.madeby.mbfrecipeproject.converters.RecipeToRecipeCommand;
 import fun.madeby.mbfrecipeproject.domain.Recipe;
 import fun.madeby.mbfrecipeproject.repositories.RecipeRepository;
-import fun.madeby.mbfrecipeproject.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

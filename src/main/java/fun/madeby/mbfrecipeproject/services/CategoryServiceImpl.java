@@ -1,4 +1,4 @@
-package fun.madeby.mbfrecipeproject.services.h2;
+package fun.madeby.mbfrecipeproject.services;
 
 import fun.madeby.mbfrecipeproject.domain.Category;
 import fun.madeby.mbfrecipeproject.domain.UnitOfMeasure;

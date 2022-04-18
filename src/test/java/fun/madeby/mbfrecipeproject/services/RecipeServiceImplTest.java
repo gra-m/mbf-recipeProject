@@ -1,16 +1,14 @@
-package fun.madeby.mbfrecipeproject.services.h2;
+package fun.madeby.mbfrecipeproject.services;
 
 import fun.madeby.mbfrecipeproject.domain.Recipe;
 import fun.madeby.mbfrecipeproject.repositories.RecipeRepository;
+import fun.madeby.mbfrecipeproject.services.RecipeServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.annotation.DirtiesContext;
 
 import java.util.HashSet;
 import java.util.Optional;

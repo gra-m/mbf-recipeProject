@@ -1,7 +1,7 @@
 package fun.madeby.mbfrecipeproject.controllers;
 
 import fun.madeby.mbfrecipeproject.domain.Recipe;
-import fun.madeby.mbfrecipeproject.services.h2.RecipeServiceImpl;
+import fun.madeby.mbfrecipeproject.services.RecipeServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

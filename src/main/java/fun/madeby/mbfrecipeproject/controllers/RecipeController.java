@@ -1,5 +1,6 @@
 package fun.madeby.mbfrecipeproject.controllers;
 
+import fun.madeby.mbfrecipeproject.commands.RecipeCommand;
 import fun.madeby.mbfrecipeproject.services.RecipeService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,5 +24,11 @@ public class RecipeController {
         model.addAttribute("recipe", RECIPE_SERVICE.getRecipeById(Long.valueOf(id)));
 
         return "recipe/show";
+    }
+
+    @RequestMapping("recipe/new")
+    public String newRecipe(Model model) {
+        model.addAttribute("recipe", new RecipeCommand());
+        return "recipe/recipe-form";
     }
 }
