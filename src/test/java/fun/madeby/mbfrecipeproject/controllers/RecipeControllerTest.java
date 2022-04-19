@@ -3,12 +3,14 @@ package fun.madeby.mbfrecipeproject.controllers;
 import fun.madeby.mbfrecipeproject.commands.RecipeCommand;
 import fun.madeby.mbfrecipeproject.domain.Recipe;
 import fun.madeby.mbfrecipeproject.services.RecipeService;
+import fun.madeby.mbfrecipeproject.services.RecipeServiceImpl;
 import org.hamcrest.core.IsSame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,6 +20,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -28,6 +31,8 @@ class RecipeControllerTest {
     RecipeController controllerUnderTest;
     @Mock
     RecipeService recipeService;
+    @Mock
+    RecipeServiceImpl recipeServiceImpl;
     MockMvc mockMvc;
     Recipe recipe1;
     Recipe recipe2;
@@ -101,7 +106,16 @@ class RecipeControllerTest {
     }
 
 
+    @Test
+    public void testDeleteAction() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/2/delete"))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(MockMvcResultMatchers.view().name("redirect:/"));
 
+        // deleteById is part of Spring Data JPA so decided to test service that calls it
+        Mockito.verify(recipeServiceImpl, Mockito.times(1)).deleteRecipeById(anyLong());
+
+    }
 
 
 
