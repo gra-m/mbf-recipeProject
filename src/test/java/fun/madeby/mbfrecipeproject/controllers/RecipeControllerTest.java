@@ -82,7 +82,7 @@ class RecipeControllerTest {
                 .param("description", "some string"))
         //then
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.view().name("redirect:/recipe/show/4"));
+                .andExpect(MockMvcResultMatchers.view().name("redirect:/recipe/4/show"));
     }
 
     @Test
