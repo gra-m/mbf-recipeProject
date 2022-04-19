@@ -26,7 +26,6 @@ class NoteCommandToNoteTest {
         testCommandObject = new NoteCommand();
         testCommandObject.setId(ID);
         testCommandObject.setRecipeNote(RECIPE_NOTE);
-        testCommandObject.setRecipe(RECIPE);
     }
 
     @Test

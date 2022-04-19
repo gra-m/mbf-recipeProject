@@ -2,10 +2,7 @@ package fun.madeby.mbfrecipeproject.domain;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by Gra_m on 2022 04 04
@@ -15,6 +12,7 @@ import javax.persistence.Id;
 public class UnitOfMeasure {
 
     @Id
+    @Column(unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;

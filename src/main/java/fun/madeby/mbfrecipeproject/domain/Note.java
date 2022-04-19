@@ -12,19 +12,16 @@ import javax.persistence.*;
 @Entity
 public class Note {
     @Id
+    @Column(unique=true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Lob // CharacterLargeObject: JPA limit is 255 for a string
     private String recipeNote;
-    @OneToOne
-    private Recipe recipe;
 
     public Note() {
-
     }
 
     public Note(String recipeNote, Recipe recipe) {
         this.recipeNote = recipeNote;
-        this.recipe = recipe;
     }
 }

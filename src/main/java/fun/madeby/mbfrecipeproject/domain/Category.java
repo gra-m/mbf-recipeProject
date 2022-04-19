@@ -15,6 +15,7 @@ import java.util.Set;
 @EqualsAndHashCode(exclude = {"recipes"})
 public class Category {
     @Id
+    @Column(unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;
