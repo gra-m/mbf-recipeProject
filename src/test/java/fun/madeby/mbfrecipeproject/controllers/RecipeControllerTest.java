@@ -31,8 +31,6 @@ class RecipeControllerTest {
     RecipeController controllerUnderTest;
     @Mock
     RecipeService recipeService;
-    @Mock
-    RecipeServiceImpl recipeServiceImpl;
     MockMvc mockMvc;
     Recipe recipe1;
     Recipe recipe2;
@@ -113,7 +111,7 @@ class RecipeControllerTest {
                 .andExpect(MockMvcResultMatchers.view().name("redirect:/"));
 
         // deleteById is part of Spring Data JPA so decided to test service that calls it
-        Mockito.verify(recipeServiceImpl, Mockito.times(1)).deleteRecipeById(anyLong());
+        Mockito.verify(recipeService, Mockito.times(1)).deleteRecipeById(anyLong());
 
     }
 

@@ -13,8 +13,8 @@ public interface RecipeService {
 
     Set<Recipe> getRecipes();
     Recipe getRecipeById(Long aLong);
-
     RecipeCommand getRecipeCommandById(Long aLong);
     RecipeCommand saveRecipeCommand(RecipeCommand recipeCommand);
+    void deleteRecipeById(Long aLong);
 
 }
