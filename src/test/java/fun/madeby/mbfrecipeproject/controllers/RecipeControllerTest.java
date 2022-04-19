@@ -86,6 +86,21 @@ class RecipeControllerTest {
                 .andExpect(MockMvcResultMatchers.view().name("redirect:/recipe/show/4"));
     }
 
+    @Test
+    void testGetUpdateView() throws Exception {
+        // given this recipeCommand is the recipe to be updated /recipe/5/update
+        RecipeCommand recipeCommand = new RecipeCommand();
+        recipeCommand.setId(6L);
+
+        when(recipeService.getRecipeById(any()))
+                .thenReturn(recipeCommand);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/6/update"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("recipe/recipe-form"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("recipe"));
+    }
+
 
 
 
