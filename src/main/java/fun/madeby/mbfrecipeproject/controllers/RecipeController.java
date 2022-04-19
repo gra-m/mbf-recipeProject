@@ -38,7 +38,7 @@ public class RecipeController {
     //todo test
     @PostMapping
     @RequestMapping("/recipe")
-    public String saveOrUpdate(@ModelAttribute RecipeCommand command) {
+    public String saveOrUpdateRecipe(@ModelAttribute RecipeCommand command) {
         RecipeCommand savedRecipeCommand = RECIPE_SERVICE.saveRecipeCommand(command);
 
         return "redirect:/recipe/show/" + savedRecipeCommand.getId();
