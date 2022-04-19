@@ -28,14 +28,20 @@ public class RecipeController {
         return "recipe/show";
     }
 
-    //todo test
     @RequestMapping("/recipe/new")
     public String newRecipeForm(Model model) {
         model.addAttribute("recipe", new RecipeCommand());
         return "recipe/recipe-form";
     }
 
-    //todo test
+    @RequestMapping("/recipe/{id}/update")
+    public String getUpdateView(@PathVariable String id, Model model) {
+
+        model.addAttribute("recipe", RECIPE_SERVICE.getRecipeCommandById(Long.valueOf(id)));
+
+        return "recipe/recipe-form";
+    }
+
     @PostMapping
     @RequestMapping("/recipe")
     public String saveOrUpdateRecipe(@ModelAttribute RecipeCommand command) {

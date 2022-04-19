@@ -7,7 +7,6 @@ import org.hamcrest.core.IsSame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -92,7 +91,7 @@ class RecipeControllerTest {
         RecipeCommand recipeCommand = new RecipeCommand();
         recipeCommand.setId(6L);
 
-        when(recipeService.getRecipeById(any()))
+        when(recipeService.getRecipeCommandById(any()))
                 .thenReturn(recipeCommand);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/6/update"))
