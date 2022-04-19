@@ -2,7 +2,6 @@ package fun.madeby.mbfrecipeproject.services;
 
 import fun.madeby.mbfrecipeproject.domain.Recipe;
 import fun.madeby.mbfrecipeproject.repositories.RecipeRepository;
-import fun.madeby.mbfrecipeproject.services.RecipeServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +26,7 @@ class RecipeServiceImplTest {
     //RecipeToRecipeCommand recipeToRecipeCommand
 
     @InjectMocks
-    RecipeServiceImpl recipeService;
+    RecipeServiceImpl recipeServiceImpl;
     Recipe recipe1;
     Recipe recipe2;
 
@@ -42,13 +41,13 @@ class RecipeServiceImplTest {
 
 
     @Test
-    void getRecipeById() {
+    void testGetRecipeById() {
         //given
         Optional<Recipe> recipe1Optional = Optional.of(recipe1);
         when(recipeRepository.findById(anyLong()))
                 .thenReturn(recipe1Optional);
         //when
-        Recipe recipeReturned = recipeService.getRecipeById(1L);
+        Recipe recipeReturned = recipeServiceImpl.getRecipeById(1L);
         //then
         assertNotNull(recipeReturned, "Null recipe returned");
         verify(recipeRepository, times(1))
@@ -58,7 +57,7 @@ class RecipeServiceImplTest {
 
 
     @Test
-    void getRecipesTest() {
+    void testGetRecipesTest() {
         //given
         HashSet<Recipe> recipeData = new HashSet<>();
         recipeData.add(recipe1);
@@ -67,10 +66,30 @@ class RecipeServiceImplTest {
         when(recipeRepository.findAll()).thenReturn(recipeData);
 
         // test the actual business logic, in this case converting iterable into collection/Set
-        Set<Recipe> recipeSet = recipeService.getRecipes();
+        Set<Recipe> recipeSet = recipeServiceImpl.getRecipes();
 
         assertEquals(2, recipeSet.size() );
         verify(recipeRepository, times(1)).findAll();
         verify(recipeRepository, never()).findById(anyLong());
     }
+
+
+    @Test
+    void testDeleteRecipeById() {
+        //given
+        Long idToDelete = 4L;
+
+        //when
+        recipeServiceImpl.deleteRecipeById(idToDelete);
+
+        //then
+        verify(recipeRepository, times(1)).deleteById(anyLong());
+    }
+
+
+
+
+
+
+
 }

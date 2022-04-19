@@ -86,5 +86,10 @@ public class RecipeServiceImpl implements RecipeService {
         }
         return new ArrayList<>();
     }
+
+    //public void deleteRecipeById(Long id) {
+        //RECIPE_REPOSITORY.deleteById(id);
+
+    //}
 }
 
