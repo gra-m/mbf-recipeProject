@@ -14,7 +14,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
@@ -47,15 +46,22 @@ class RecipeControllerTest {
        //given recipe1 exists, recipeService is in the Spring Context
        // and a mockRequest object has been built with this controller.
 
-
         when(recipeService.getRecipeById(anyLong()))
                 .thenReturn(recipe1);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/show/1"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/show"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("recipe/show"))
                 .andExpect(MockMvcResultMatchers.model().attribute("recipe", new IsSame(recipe1)));
-
-
     }
+
+    @Test
+    void testGetNewRecipeForm() throws Exception {
+        //given /recipe/new has been requested by user (MockMvcRequestBuilders)
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/new"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("recipe/recipe-form"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("recipe"));
+    }
+
 }

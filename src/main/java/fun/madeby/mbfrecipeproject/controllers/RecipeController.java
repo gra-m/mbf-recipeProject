@@ -29,15 +29,15 @@ public class RecipeController {
     }
 
     //todo test
-    @RequestMapping("recipe/new")
-    public String newRecipe(Model model) {
+    @RequestMapping("/recipe/new")
+    public String newRecipeForm(Model model) {
         model.addAttribute("recipe", new RecipeCommand());
         return "recipe/recipe-form";
     }
 
     //todo test
     @PostMapping
-    @RequestMapping("recipe")
+    @RequestMapping("/recipe")
     public String saveOrUpdate(@ModelAttribute RecipeCommand command) {
         RecipeCommand savedRecipeCommand = RECIPE_SERVICE.saveRecipeCommand(command);
 
