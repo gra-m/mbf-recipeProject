@@ -21,19 +21,21 @@ public class RecipeController {
         RECIPE_SERVICE = recipe_service;
     }
 
-    @RequestMapping("/recipe/show/{id}")
+    @RequestMapping("/recipe/{id}/show")
     public String getRecipeById(@PathVariable String id, Model model) {
         model.addAttribute("recipe", RECIPE_SERVICE.getRecipeById(Long.valueOf(id)));
 
         return "recipe/show";
     }
 
+    //todo test
     @RequestMapping("recipe/new")
     public String newRecipe(Model model) {
         model.addAttribute("recipe", new RecipeCommand());
         return "recipe/recipe-form";
     }
 
+    //todo test
     @PostMapping
     @RequestMapping("recipe")
     public String saveOrUpdate(@ModelAttribute RecipeCommand command) {
