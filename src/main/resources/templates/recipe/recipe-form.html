@@ -23,11 +23,14 @@
 <div class="container-fluid" style="margin-top: 20px">
     <form th:object="${recipe}" th:action="@{/recipe/}" method="post">
         <input type="hidden" th:field="*{id}"/>
+        <!--note.id passed back on update overwrites any existing, no need for orphan removal-->
+        <input type="hidden" th:field="*{note.id}"/>
+
         <div class="card-group col-md-8 m-md-auto">
-            <div class="row col-sm-12">
+            <section class="row col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="card-title">Edit Recipe Information</h1>
+                        <h1 class="card-title">Add/Edit Recipe Information</h1>
                         <div class="row">
                             <div class="col-sm-12 form-group">
                                 <label>Recipe Description:</label>
@@ -89,8 +92,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row col-sm-12">
+            </section>
+
+            <section class="row col-sm-12">
                 <div class="card">
                     <div class="row">
                         <div class="card-body">
@@ -116,8 +120,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row col-sm-12">
+            </section>
+
+            <section class="row col-sm-12">
                 <div class="card">
                     <div class="card-body">
                         <h1 class="panel-title">Directions</h1>
@@ -127,15 +132,15 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row col-sm-12">
+            </section>
+
+            <section class="row col-sm-12">
                 <div class="card">
                     <div class="card-body">
                         <h1 class="panel-title">Notes</h1>
                         <div class="row">
                             <div class="col-md-12 form-group">
-                                <!--note.id passed back on update overwrites any existing, no need for orphan removal-->
-                                <input type="hidden" th:field="*{note.id}"/>
+
                                 <textarea class="form-control" rows="3" th:field="*{note.recipeNote}"></textarea>
                             </div>
                         </div>
@@ -144,8 +149,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </div>
+
     </form>
 </div>
 
