@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 @Entity
 public class Ingredient {
     @Id
-    @Column(unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne

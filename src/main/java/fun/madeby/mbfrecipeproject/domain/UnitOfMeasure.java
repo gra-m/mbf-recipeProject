@@ -12,7 +12,6 @@ import javax.persistence.*;
 public class UnitOfMeasure {
 
     @Id
-    @Column(unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;

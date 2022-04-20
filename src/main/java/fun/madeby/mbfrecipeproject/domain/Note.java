@@ -12,7 +12,6 @@ import javax.persistence.*;
 @Entity
 public class Note {
     @Id
-    @Column(unique=true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Lob // CharacterLargeObject: JPA limit is 255 for a string

@@ -14,7 +14,6 @@ import java.util.Set;
 public class Recipe {
 
     @Id
-    @Column(unique = true)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
@@ -33,7 +32,8 @@ public class Recipe {
     private Set<Ingredient> ingredients = new HashSet<>();
     @Lob
     private Byte[] image;
-    @OneToOne(cascade = CascadeType.ALL)
+    // orphanRemoval included as backstop, note id is now a hidden input in new/update form
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval=true)
     private Note note;
     @ManyToMany
     @JoinTable(

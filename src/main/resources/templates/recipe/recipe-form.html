@@ -134,6 +134,8 @@
                         <h1 class="panel-title">Notes</h1>
                         <div class="row">
                             <div class="col-md-12 form-group">
+                                <!--note.id passed back on update overwrites any existing, no need for orphan removal-->
+                                <input type="hidden" th:field="*{note.id}"/>
                                 <textarea class="form-control" rows="3" th:field="*{note.recipeNote}"></textarea>
                             </div>
                         </div>
