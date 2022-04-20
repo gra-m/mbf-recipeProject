@@ -1,6 +1,5 @@
 package fun.madeby.mbfrecipeproject.commands;
 
-import fun.madeby.mbfrecipeproject.domain.Recipe;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

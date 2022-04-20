@@ -79,9 +79,9 @@
                             <tr th:each="ingredient : ${recipe.ingredients}">
                                 <td th:text="*{ingredient.id}">6</td>
                                 <td th:text="${ingredient.description}">Template Goodnees 6</td>
-                                <td><a href="#" th:href="@{'/recipe/ingredient' + ${ingredient.id} + '/show' }">View</a></td>
-                                <td><a href="#" th:href="@{'/recipe/ingredient' + ${ingredient.id} + '/update' }">Update</a></td>
-                                <td><a href="#" th:href="@{'/recipe/ingredient' + ${ingredient.id} + '/delete' }">Delete</a></td>
+                                <td><a href="#" th:href="@{'/recipe/ingredients/' + ${ingredient.id} + '/show' }">View</a></td>
+                                <td><a href="#" th:href="@{'/recipe/ingredients/' + ${ingredient.id} + '/update' }">Update</a></td>
+                                <td><a href="#" th:href="@{'/recipe/ingredients/' + ${ingredient.id} + '/delete' }">Delete</a></td>
                             </tr>
                         </table>
                     </div>

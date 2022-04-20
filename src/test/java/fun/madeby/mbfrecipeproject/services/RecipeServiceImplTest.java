@@ -22,8 +22,6 @@ class RecipeServiceImplTest {
     @Mock
     RecipeRepository recipeRepository;
 
-    //@Mock
-    //RecipeToRecipeCommand recipeToRecipeCommand
 
     @InjectMocks
     RecipeServiceImpl recipeServiceImpl;
