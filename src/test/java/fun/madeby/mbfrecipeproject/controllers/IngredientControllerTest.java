@@ -1,7 +1,9 @@
 package fun.madeby.mbfrecipeproject.controllers;
 
+import fun.madeby.mbfrecipeproject.commands.IngredientCommand;
 import fun.madeby.mbfrecipeproject.domain.Ingredient;
 import fun.madeby.mbfrecipeproject.domain.Recipe;
+import fun.madeby.mbfrecipeproject.services.IngredientService;
 import fun.madeby.mbfrecipeproject.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,9 +33,14 @@ class IngredientControllerTest {
     @Mock
     RecipeService recipeService;
 
+    @Mock
+    IngredientService ingredientService;
+
     MockMvc mockMvc;
     Recipe recipe1;
     Set<Ingredient> ingredientSet;
+    Ingredient ingredient1;
+    IngredientCommand ingredientCommand1;
 
     @BeforeEach
     void setUp() {
@@ -44,10 +51,9 @@ class IngredientControllerTest {
         ingredientSet = new HashSet<>(2);
         recipe1 = new Recipe();
         recipe1.setId(1L);
-        Ingredient ingredient1 = new Ingredient();
-        Ingredient ingredient2 = new Ingredient();
+        ingredient1 = new Ingredient();
+        ingredientCommand1 = new IngredientCommand();
         ingredientSet.add(ingredient1);
-        ingredientSet.add(ingredient2);
         recipe1.setIngredients(ingredientSet);
     }
 
@@ -65,6 +71,20 @@ class IngredientControllerTest {
                 .andExpect(MockMvcResultMatchers.view().name("recipe/ingredients/list"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("recipe"));
 
-        //then
     }
+
+    @Test
+    void testShowIngredient() throws Exception {
+
+        //wnen
+        when(ingredientService.getIngredientById(anyLong())).thenReturn(ingredientCommand1);
+
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/ingredients/1/show"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("recipe/ingredients/show"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("ingredient"));
+
+    }
+
 }
