@@ -52,7 +52,7 @@ class IndexControllerTest {
 
         //Given this MockMvc stand alone (unit test) controller
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
-        // and given this happy path, return is not empty list
+        // and given this happy path, return is not empty list --nothing is actually done with this..
         ArrayList<Recipe> recipeArrayList = new ArrayList<>();
         recipeArrayList.add(recipeOne);
         when(recipeServiceImpl.findAll()).thenReturn(recipeArrayList);

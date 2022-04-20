@@ -3,7 +3,6 @@ package fun.madeby.mbfrecipeproject.controllers;
 import fun.madeby.mbfrecipeproject.commands.RecipeCommand;
 import fun.madeby.mbfrecipeproject.domain.Recipe;
 import fun.madeby.mbfrecipeproject.services.RecipeService;
-import fun.madeby.mbfrecipeproject.services.RecipeServiceImpl;
 import org.hamcrest.core.IsSame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,9 +19,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @ExtendWith(MockitoExtension.class)
 class RecipeControllerTest {
