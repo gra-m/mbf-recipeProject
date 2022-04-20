@@ -33,7 +33,7 @@ public class IngredientServiceImpl implements IngredientService{
         Ingredient ingredient = new Ingredient();
 
 
-        Optional<Ingredient> optionalIngredient = INGREDIENT_REPOSITORY.findIngredientById(id);
+        Optional<Ingredient> optionalIngredient = INGREDIENT_REPOSITORY.findById(id);
         if (optionalIngredient.isPresent()) {
             ingredient = optionalIngredient.get();
         } else {

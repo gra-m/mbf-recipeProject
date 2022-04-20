@@ -1,5 +1,6 @@
 package fun.madeby.mbfrecipeproject.services;
 
+import com.sun.istack.NotNull;
 import fun.madeby.mbfrecipeproject.commands.IngredientCommand;
 import fun.madeby.mbfrecipeproject.converters.IngredientToIngredientCommand;
 import fun.madeby.mbfrecipeproject.domain.Ingredient;
@@ -31,8 +32,8 @@ class IngredientServiceImplTest {
 
     Ingredient ingredient1;
     Long ing1_Id = 4L;
-    Ingredient ingredient2;
-    Long ing2_Id = 6L;
+    Long ing2_Id = 5L;
+    IngredientCommand ingredientCommand1;
 
 
     @BeforeEach
@@ -42,28 +43,36 @@ class IngredientServiceImplTest {
         ingredient1.setId(ing1_Id);
         ingredient1.setDescription("Just playing this does nothing");
         ingredient1.setAmount(new BigDecimal(3));
-        ingredient2 = new Ingredient();
-        ingredient2.setId(ing2_Id);
+        ingredientCommand1 = new IngredientCommand();
+        ingredientCommand1.setId(ingredient1.getId());
+        ingredientCommand1.setDescription(ingredient1.getDescription());
 
     }
 
-   /* @Test
+    @Test
     void testGetIngredientById() {
         // I've created an ingredientRepository to return ingredient directly by its id rather
         // than streaming/filter/mapping through a returned set from recipe
         //given
         Optional<Ingredient> ingredient1Optional = Optional.of(ingredient1);
+        Ingredient optionalConfirmed = ingredient1Optional.get();
         when(ingredientRepository.findById(anyLong()))
                 .thenReturn(ingredient1Optional);
-
-
+        when(ingredientToIngredientCommand.convert(any(Ingredient.class)))
+                .thenReturn(ingredientCommand1);
+        when(ingredientServiceImpl.getIngredientById(anyLong())).
+                thenReturn(ingredientCommand1);
         //when
-        IngredientCommand ingredientCommand = ingredientServiceImpl.getIngredientById(ing1_Id);
+        IngredientCommand returnedIngredientCommand = ingredientServiceImpl.getIngredientById(ing1_Id);
+
 
         //then
-        assertNotNull(ingredientCommand, "Null IngredientCommand returned");
-        verify(ingredientRepository, times(1)).findIngredientById(anyLong());
-        assertEquals(ing1_Id, ingredientCommand.getId());
+        assertNotNull(returnedIngredientCommand, "command was not returned");
+        assertNotNull(ingredient1Optional, "Even though created from ingredient1, ingredient1Optional is null.");
+        assertNotNull(ingredientCommand1, "Even though created from ingredient1, ingredientCommand1 is null.");
+        verify(ingredientToIngredientCommand, times(1)).convert(optionalConfirmed);
+        verify(ingredientRepository, times(1)).findById(ing1_Id);
+        assertEquals(ing1_Id, returnedIngredientCommand.getId());
 
 
 
@@ -71,5 +80,5 @@ class IngredientServiceImplTest {
 
 
 
-    }*/
+    }
 }
