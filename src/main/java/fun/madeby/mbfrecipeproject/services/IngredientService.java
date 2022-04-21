@@ -11,7 +11,5 @@ public interface IngredientService {
 
     //Optional<Recipe> getIngredientById(Long id);
     IngredientCommand getIngredientById(Long id);
-    //IngredientCommand saveOrUpdateIngredientCommand(IngredientCommand command);
-
-    String saveOrUpdateIngredientCommand(IngredientCommand command);
+    IngredientCommand saveOrUpdateIngredientCommand(IngredientCommand command);
 }

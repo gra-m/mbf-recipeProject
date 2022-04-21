@@ -14,5 +14,6 @@ public interface RecipeRepository extends CrudRepository<Recipe, Long> {
     Optional<Recipe> findRecipeByTitle(String title);
     Iterable<Recipe> findAll();
     Optional<Recipe> findById(Long aLong);
+    Recipe saveRecipe(Recipe recipe);
 
 }

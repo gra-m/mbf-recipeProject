@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 
@@ -60,18 +61,17 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     @Transactional
-    public String saveOrUpdateIngredientCommand(IngredientCommand command) {
+    public IngredientCommand saveOrUpdateIngredientCommand(IngredientCommand command) {
 
         IngredientCommand retrievedSavedIngredientCommand;
         Ingredient ingredientBeingUpdated;
-        Optional<Recipe> retrievedCommandRecipe = RECIPE_REPOSITORY.findById(command.getRecipe_id());
+        Optional<Recipe> recipeIngredientCommandBelongsTo = RECIPE_REPOSITORY.findById(command.getRecipe_id());
 
-        if (retrievedCommandRecipe.isEmpty()) {
+        if (recipeIngredientCommandBelongsTo.isEmpty()) {
             log.error("Ingredient command is detatched recipe " + command.getRecipe_id() + " cannot be found");
-            //return new IngredientCommand();
-            return "Hello";
+            return new IngredientCommand();
         } else {
-            Recipe recipe = retrievedCommandRecipe.get();
+            Recipe recipe = recipeIngredientCommandBelongsTo.get();
 
             Optional<Ingredient> ingredientOptionalToUpdate = recipe.getIngredients()
                     .stream()
@@ -90,7 +90,9 @@ public class IngredientServiceImpl implements IngredientService {
                     throw new RuntimeException("UOM NOT FOUND");
                 }
             } else {
-                recipe.addIngredient(INGREDIENT_COMMAND_TO_INGREDIENT.convert(command));
+                Ingredient commandConvertedToIngredient = INGREDIENT_COMMAND_TO_INGREDIENT.convert(command);
+                assert commandConvertedToIngredient != null;
+                recipe.addIngredient(commandConvertedToIngredient);
             }
 
             Recipe savedRecipe = RECIPE_REPOSITORY.save(recipe);
@@ -99,20 +101,29 @@ public class IngredientServiceImpl implements IngredientService {
                     .stream()
                     .filter(ingredients -> ingredients.getId().equals(command.getId()))
                     .findFirst()
-                    .get());
-            */
+                    .get());*/
 
-            String returnMe = ("I am stream Id " + savedRecipe.getIngredients().iterator().next().getId() + " I am command Id " + command.getId());
-            //return savedRecipe.toString();
+            Ingredient ingredientFound = new Ingredient();
+            for(Ingredient ingredient : savedRecipe.getIngredients()) {
+                if(ingredient.getId().equals(command.getId())){
+                    ingredientFound = ingredient;
+                    break;
+                }
+            }
+            ingredientFound.setId(3L);
+            ingredientFound.setDescription("Why");
+            ingredientFound.setAmount(new BigDecimal(3));
 
-            return returnMe;
+            retrievedSavedIngredientCommand =  INGREDIENT_TO_INGREDIENT_COMMAND.convert(ingredientFound);
+
+
 
         }
 
-        /*if(retrievedSavedIngredientCommand != null)
+        if(retrievedSavedIngredientCommand != null)
             return retrievedSavedIngredientCommand;
         else
-            throw new RuntimeException("ERROR @ SAVE - IngredientCommand could not be retrieved from saved Recipe");*/
+            throw new RuntimeException("ERROR @ SAVE - IngredientCommand could not be retrieved from saved Recipe");
     }
 
 

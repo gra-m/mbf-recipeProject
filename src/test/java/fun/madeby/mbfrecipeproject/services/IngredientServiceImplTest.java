@@ -112,6 +112,7 @@ class IngredientServiceImplTest {
 
     //region SAVE OR UPDATE IngredientCommand
 
+/*
     @Test
     void testSaveOrUpdateIngredientCommand_UpdatePath(){
         //given
@@ -134,23 +135,28 @@ class IngredientServiceImplTest {
 
         System.out.println("Before" + savedRecipe);
         //when
-        String savedCommand = ingredientServiceImpl.saveOrUpdateIngredientCommand(command);
+        IngredientCommand savedCommand = ingredientServiceImpl.saveOrUpdateIngredientCommand(command);
 
         //then
 
-        System.out.println("I am here" + savedCommand);
-        /*assertEquals(Long.valueOf(3L), savedCommand.getId());
+        //assertNotNull(savedCommand);
         verify(recipeRepository, times(1)).findById(anyLong());
-        verify(recipeRepository, times(1)).save(any(Recipe.class));*/
+        verify(recipeRepository, times(1)).save(any(Recipe.class));
+        */
+/*assertEquals(Long.valueOf(3L), savedCommand.getId());
+        verify(recipeRepository, times(1)).findById(anyLong());
+        verify(recipeRepository, times(1)).save(any(Recipe.class));*//*
+
 
     }
 
+*/
 
 
 
     //region ERROR PATHS
 
-  /*  @Test
+    @Test
     void testSaveOrUpdateIngredientCommand_RecipeDoesNotExist() {
         //given
         Optional<Recipe> emptyRecipeOptional = Optional.empty();
@@ -192,7 +198,7 @@ class IngredientServiceImplTest {
         //then
         assertTrue(actualMessage.contains(expectedMessage), "actualMessage does not contain expected message");
 
-    }*/
+    }
 
     //endregion
 

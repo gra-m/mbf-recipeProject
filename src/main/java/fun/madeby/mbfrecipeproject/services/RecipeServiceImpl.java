@@ -66,8 +66,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     public Recipe saveRecipe(Recipe recipe) {
-        Recipe persistedRecipe = RECIPE_REPOSITORY.save(recipe);
-        return persistedRecipe;
+        return RECIPE_REPOSITORY.save(recipe);
     }
 
     public void saveAll(List<Recipe> recipeList) {
