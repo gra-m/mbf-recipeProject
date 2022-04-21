@@ -3,7 +3,9 @@ package fun.madeby.mbfrecipeproject.services;
 import fun.madeby.mbfrecipeproject.commands.IngredientCommand;
 import fun.madeby.mbfrecipeproject.converters.IngredientToIngredientCommand;
 import fun.madeby.mbfrecipeproject.domain.Ingredient;
+import fun.madeby.mbfrecipeproject.domain.Recipe;
 import fun.madeby.mbfrecipeproject.repositories.IngredientRepository;
+import fun.madeby.mbfrecipeproject.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,11 +21,15 @@ import java.util.Optional;
 @Service
 public class IngredientServiceImpl implements IngredientService{
     private final IngredientRepository INGREDIENT_REPOSITORY;
+    private final RecipeRepository RECIPE_REPOSITORY;
     private final IngredientToIngredientCommand INGREDIENT_TO_INGREDIENT_COMMAND;
 
+
     public IngredientServiceImpl(IngredientRepository ingredientsRepository,
+                                 RecipeRepository recipe_repository,
                                  IngredientToIngredientCommand ingredientToIngredientCommand) {
         this.INGREDIENT_REPOSITORY = ingredientsRepository;
+        RECIPE_REPOSITORY = recipe_repository;
         this.INGREDIENT_TO_INGREDIENT_COMMAND = ingredientToIngredientCommand;
     }
 
@@ -42,4 +48,32 @@ public class IngredientServiceImpl implements IngredientService{
         }
         return INGREDIENT_TO_INGREDIENT_COMMAND.convert(ingredient);
     }
+
+    @Override
+    public IngredientCommand saveOrUpdateIngredientCommand(IngredientCommand command) {
+        Ingredient ingredientToUpdate = new Ingredient();
+      Optional<Recipe>  retrievedCommandRecipe = RECIPE_REPOSITORY.findById(command.getRecipe_id());
+
+      if(retrievedCommandRecipe.isEmpty()) {
+          log.error("Ingredient command is detatched recipe " + command.getRecipe_id() + " cannot be found");
+          return new IngredientCommand();
+      } else {
+          Recipe recipe = retrievedCommandRecipe.get();
+
+          Optional<Ingredient> ingredientOptionalToUpdate = recipe.getIngredients()
+                  .stream()
+                  .filter(ingredient -> ingredient.getId().equals(command.getId()))
+                  .findFirst();
+
+          if(ingredientOptionalToUpdate.isPresent()) {
+              ingredientToUpdate = ingredientOptionalToUpdate.get();
+              return INGREDIENT_TO_INGREDIENT_COMMAND.convert(ingredientToUpdate);
+          }
+
+      }
+
+        return null;
+    }
+
+
 }

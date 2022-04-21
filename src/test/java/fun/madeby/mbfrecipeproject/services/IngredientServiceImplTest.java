@@ -3,8 +3,12 @@ package fun.madeby.mbfrecipeproject.services;
 import com.sun.istack.NotNull;
 import fun.madeby.mbfrecipeproject.commands.IngredientCommand;
 import fun.madeby.mbfrecipeproject.converters.IngredientToIngredientCommand;
+import fun.madeby.mbfrecipeproject.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import fun.madeby.mbfrecipeproject.domain.Ingredient;
+import fun.madeby.mbfrecipeproject.domain.Recipe;
+import fun.madeby.mbfrecipeproject.domain.UnitOfMeasure;
 import fun.madeby.mbfrecipeproject.repositories.IngredientRepository;
+import fun.madeby.mbfrecipeproject.repositories.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,28 +28,75 @@ class IngredientServiceImplTest {
     @Mock
     IngredientRepository ingredientRepository;
 
+    @Mock
+    RecipeRepository recipeRepository;
+
     @InjectMocks
     IngredientServiceImpl ingredientServiceImpl;
 
     @Mock
     IngredientToIngredientCommand ingredientToIngredientCommand;
 
+    @Mock
+    UnitOfMeasureToUnitOfMeasureCommand unitOfMeasureToUnitOfMeasureCommand;
+
+    Recipe recipe1;
+    Long recipe1_id = 1L;
+
     Ingredient ingredient1;
     Long ing1_Id = 4L;
     Long ing2_Id = 5L;
     IngredientCommand ingredientCommand1;
+    Long ingredientCommand1RecipeId = 4L;
+
+    UnitOfMeasure unitOfMeasure1;
+    Long unitOfMeasure1_Id = 33L;
 
 
     @BeforeEach
     void setUp() {
 
+        unitOfMeasure1 = new UnitOfMeasure();
+        unitOfMeasure1.setId(unitOfMeasure1_Id);
+        unitOfMeasure1.setDescription("I am the unit of measure");
+
         ingredient1 = new Ingredient();
         ingredient1.setId(ing1_Id);
         ingredient1.setDescription("Just playing this does nothing");
         ingredient1.setAmount(new BigDecimal(3));
+        ingredient1.setUom(unitOfMeasure1);
+
         ingredientCommand1 = new IngredientCommand();
         ingredientCommand1.setId(ingredient1.getId());
         ingredientCommand1.setDescription(ingredient1.getDescription());
+        ingredientCommand1.setRecipe_id(ingredientCommand1RecipeId);
+        //ingredientCommand1.setUom(unitOfMeasure1);
+
+        recipe1 = new Recipe();
+        recipe1.setId(recipe1_id);
+        recipe1.setDescription("description");
+        recipe1.getIngredients().add(ingredient1);
+    }
+
+    @Test
+    void testSaveOrUpdateIngredientCommand_RecipeDoesNotExist() {
+        //given
+        //Optional<Recipe> optionalOfRecipe1 = Optional.of(recipe1);
+        Optional<Recipe> emptyRecipeOptional = Optional.empty();
+        when(recipeRepository.findById(anyLong()))
+                .thenReturn(emptyRecipeOptional);
+
+        //when
+        IngredientCommand returnedIngredientCommand = ingredientServiceImpl.saveOrUpdateIngredientCommand(ingredientCommand1);
+
+        //then
+        assertNotNull(returnedIngredientCommand, "returned command was null");
+        assertNull(returnedIngredientCommand.getId());
+        assertNull(returnedIngredientCommand.getDescription());
+        assertNull(returnedIngredientCommand.getRecipe());
+        assertNull(returnedIngredientCommand.getAmount());
+        assertNull(returnedIngredientCommand.getUom());
+
 
     }
 
@@ -81,4 +132,13 @@ class IngredientServiceImplTest {
 
 
     }
+
+
+
+
+
+
+
+
+
 }
