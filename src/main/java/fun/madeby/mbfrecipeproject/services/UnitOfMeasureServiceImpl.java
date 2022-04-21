@@ -17,7 +17,7 @@ import java.util.stream.StreamSupport;
  * Created by Gra_m on 2022 04 05
  */
 @Service
-public class UnitOfMeasureServiceImpl {
+public class UnitOfMeasureServiceImpl implements UnitOfMeasureService {
     private final UnitOfMeasureRepository UOM_REPOSITORY;
     private final UnitOfMeasureToUnitOfMeasureCommand UOM_To_UOM_COMMAND;
 
@@ -34,13 +34,13 @@ public class UnitOfMeasureServiceImpl {
         return UOM_REPOSITORY.findAll();
     }
 
+    @Override
     @Transactional
-    public Set<UnitOfMeasureCommand> ListAllUOMs() {
+    public Set<UnitOfMeasureCommand> listAllUoms() {
        return StreamSupport.stream(UOM_REPOSITORY.findAll()
                .spliterator(), false)
                .map(UOM_To_UOM_COMMAND::convert)
                .collect(Collectors.toSet());
     }
-
 
 }

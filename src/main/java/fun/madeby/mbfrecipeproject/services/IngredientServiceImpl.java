@@ -13,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 
@@ -97,13 +96,13 @@ public class IngredientServiceImpl implements IngredientService {
 
             Recipe savedRecipe = RECIPE_REPOSITORY.save(recipe);
 
-            /*retrievedSavedIngredientCommand = INGREDIENT_TO_INGREDIENT_COMMAND.convert(savedRecipe.getIngredients()
+            retrievedSavedIngredientCommand = INGREDIENT_TO_INGREDIENT_COMMAND.convert(savedRecipe.getIngredients()
                     .stream()
                     .filter(ingredients -> ingredients.getId().equals(command.getId()))
                     .findFirst()
-                    .get());*/
+                    .get());
 
-            Ingredient ingredientFound = new Ingredient();
+            /*Ingredient ingredientFound = new Ingredient();
             for(Ingredient ingredient : savedRecipe.getIngredients()) {
                 if(ingredient.getId().equals(command.getId())){
                     ingredientFound = ingredient;
@@ -115,20 +114,16 @@ public class IngredientServiceImpl implements IngredientService {
             ingredientFound.setAmount(new BigDecimal(3));
 
             retrievedSavedIngredientCommand =  INGREDIENT_TO_INGREDIENT_COMMAND.convert(ingredientFound);
-
+*/
 
 
         }
 
-        if(retrievedSavedIngredientCommand != null)
+        if (retrievedSavedIngredientCommand != null)
             return retrievedSavedIngredientCommand;
         else
             throw new RuntimeException("ERROR @ SAVE - IngredientCommand could not be retrieved from saved Recipe");
     }
-
-
-
-
 
 
 }

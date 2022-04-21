@@ -22,14 +22,15 @@
 
 <div class="container-fluid" style="margin-top: 20px">
     <!--lookup/*@thymesVar id="ingredient" type="fun.madeby.mbfrecipeproject.commands.IngredientCommand"*/-->
-    <form th:object="${ingredient}" th:action="@{'/recipe/' + ${ingredient.getRecipe_id()} + '/ingredient'}" method="post">
+    <form th:object="${ingredient}" th:action="@{'/recipe/' + ${ingredient.recipe_id} + '/ingredient'}" method="post">
         <input type="hidden" th:field="*{id}"/>
+        <input type="hidden" th:field="*{recipe_id}"/>
 
         <div class="card-group col-md-8 m-md-auto">
             <section class="row col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="card-title">Edit Ingredient Information</h1>
+                        <h1 class="card-title" th:text="${ingredient.recipe_id}+ ' ' + ${ingredient.id}">Edit Ingredient Information</h1>
                         <section class="row">
 
                             <div class="col-sm-12 col-md-4 form-group">
@@ -45,10 +46,10 @@
                             <div class="col-sm-12 col-md-3 form-group">
                                 <label for="uom">UOM:</label>
                                 <select id="uom" class="form-control" name="uom.id">
-                                    <option th:each="uomEach : ${uomList}"
-                                            th:value="${uomEach.id}"
-                                            th:selected="${uomEach.equals(ingredient.uom)}"
-                                            th:text="${uomEach.description}">Each</option>
+                                    <option th:each="eachUom : ${uomList}"
+                                            th:value="${eachUom.id}"
+                                            th:selected="${eachUom.id.equals(ingredient.uom.id)}"
+                                            th:text="${eachUom.description}">Each</option>
                                 </select>
                             </div>
 

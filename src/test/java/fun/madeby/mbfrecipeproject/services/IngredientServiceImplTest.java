@@ -112,8 +112,7 @@ class IngredientServiceImplTest {
 
     //region SAVE OR UPDATE IngredientCommand
 
-/*
-    @Test
+    /*@Test
     void testSaveOrUpdateIngredientCommand_UpdatePath(){
         //given
         IngredientCommand command = new IngredientCommand();
@@ -142,15 +141,13 @@ class IngredientServiceImplTest {
         //assertNotNull(savedCommand);
         verify(recipeRepository, times(1)).findById(anyLong());
         verify(recipeRepository, times(1)).save(any(Recipe.class));
-        */
-/*assertEquals(Long.valueOf(3L), savedCommand.getId());
+        assertEquals(Long.valueOf(3L), savedCommand.getId());
         verify(recipeRepository, times(1)).findById(anyLong());
-        verify(recipeRepository, times(1)).save(any(Recipe.class));*//*
+        verify(recipeRepository, times(1)).save(any(Recipe.class));
 
 
-    }
+    } */
 
-*/
 
 
 

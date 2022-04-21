@@ -56,7 +56,7 @@ class UnitOfMeasureServiceImplTest {
                .thenReturn(unitsOfMeasure);
 
       //when
-        Set<UnitOfMeasureCommand> returnedCommandSet =  unitOfMeasureServiceImpl.ListAllUOMs();
+        Set<UnitOfMeasureCommand> returnedCommandSet =  unitOfMeasureServiceImpl.listAllUoms();
 
         assertNotNull(returnedCommandSet);
         verify(unitOfMeasureRepository, times(1)).findAll();

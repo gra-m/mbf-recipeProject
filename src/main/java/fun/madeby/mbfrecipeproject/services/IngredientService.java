@@ -9,7 +9,6 @@ import fun.madeby.mbfrecipeproject.commands.IngredientCommand;
 
 public interface IngredientService {
 
-    //Optional<Recipe> getIngredientById(Long id);
     IngredientCommand getIngredientById(Long id);
     IngredientCommand saveOrUpdateIngredientCommand(IngredientCommand command);
 }

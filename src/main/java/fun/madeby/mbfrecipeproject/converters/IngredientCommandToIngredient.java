@@ -2,6 +2,7 @@ package fun.madeby.mbfrecipeproject.converters;
 
 import fun.madeby.mbfrecipeproject.commands.IngredientCommand;
 import fun.madeby.mbfrecipeproject.domain.Ingredient;
+import fun.madeby.mbfrecipeproject.domain.Recipe;
 import lombok.Synchronized;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.Nullable;
@@ -27,6 +28,14 @@ public class IngredientCommandToIngredient implements Converter<IngredientComman
 
         Ingredient ingredient = new Ingredient();
         ingredient.setId(source.getId());
+
+        if(source.getRecipe_id() != null){
+            Recipe recipe = new Recipe();
+            recipe.setId(source.getRecipe_id());
+            ingredient.setRecipe(recipe);
+            recipe.addIngredient(ingredient);
+        }
+
         ingredient.setDescription(source.getDescription());
         ingredient.setAmount(source.getAmount());
         ingredient.setUom(UOM_CONVERTER.convert(source.getUom()));
