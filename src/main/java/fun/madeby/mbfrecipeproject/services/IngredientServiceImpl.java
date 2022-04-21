@@ -34,12 +34,12 @@ public class IngredientServiceImpl implements IngredientService {
                                  RecipeRepository recipe_repository,
                                  UnitOfMeasureRepository uom_repository,
                                  IngredientToIngredientCommand ingredientToIngredientCommand,
-                                 IngredientCommandToIngredient ingredient_command_to_ingredient) {
+                                 IngredientCommandToIngredient ingredientCommandToIngredient) {
         this.INGREDIENT_REPOSITORY = ingredientsRepository;
         this.RECIPE_REPOSITORY = recipe_repository;
         this.UOM_REPOSITORY = uom_repository;
         this.INGREDIENT_TO_INGREDIENT_COMMAND = ingredientToIngredientCommand;
-        this.INGREDIENT_COMMAND_TO_INGREDIENT = ingredient_command_to_ingredient;
+        this.INGREDIENT_COMMAND_TO_INGREDIENT = ingredientCommandToIngredient;
     }
 
     @Override
@@ -60,15 +60,16 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     @Transactional
-    public IngredientCommand saveOrUpdateIngredientCommand(IngredientCommand command) {
+    public String saveOrUpdateIngredientCommand(IngredientCommand command) {
 
-        IngredientCommand retrievedSavedIngredientCommand = new IngredientCommand();
-        Ingredient ingredientBeingUpdated = new Ingredient();
+        IngredientCommand retrievedSavedIngredientCommand;
+        Ingredient ingredientBeingUpdated;
         Optional<Recipe> retrievedCommandRecipe = RECIPE_REPOSITORY.findById(command.getRecipe_id());
 
         if (retrievedCommandRecipe.isEmpty()) {
             log.error("Ingredient command is detatched recipe " + command.getRecipe_id() + " cannot be found");
-            return new IngredientCommand();
+            //return new IngredientCommand();
+            return "Hello";
         } else {
             Recipe recipe = retrievedCommandRecipe.get();
 
@@ -88,23 +89,30 @@ public class IngredientServiceImpl implements IngredientService {
                 } else {
                     throw new RuntimeException("UOM NOT FOUND");
                 }
-            } else
+            } else {
                 recipe.addIngredient(INGREDIENT_COMMAND_TO_INGREDIENT.convert(command));
+            }
 
             Recipe savedRecipe = RECIPE_REPOSITORY.save(recipe);
 
-            retrievedSavedIngredientCommand = INGREDIENT_TO_INGREDIENT_COMMAND.convert(savedRecipe.getIngredients()
+            /*retrievedSavedIngredientCommand = INGREDIENT_TO_INGREDIENT_COMMAND.convert(savedRecipe.getIngredients()
                     .stream()
-                    .filter(ingredient -> ingredient.getId().equals(command.getId()))
+                    .filter(ingredients -> ingredients.getId().equals(command.getId()))
                     .findFirst()
                     .get());
+            */
+
+            String returnMe = ("I am stream Id " + savedRecipe.getIngredients().iterator().next().getId() + " I am command Id " + command.getId());
+            //return savedRecipe.toString();
+
+            return returnMe;
 
         }
 
-        if(retrievedSavedIngredientCommand != null)
+        /*if(retrievedSavedIngredientCommand != null)
             return retrievedSavedIngredientCommand;
         else
-            throw new RuntimeException("ERROR @ SAVE - IngredientCommand could not be retrieved from saved Recipe");
+            throw new RuntimeException("ERROR @ SAVE - IngredientCommand could not be retrieved from saved Recipe");*/
     }
 
 
