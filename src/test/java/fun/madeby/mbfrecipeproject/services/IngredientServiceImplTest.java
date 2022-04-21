@@ -1,7 +1,7 @@
 package fun.madeby.mbfrecipeproject.services;
 
-import com.sun.istack.NotNull;
 import fun.madeby.mbfrecipeproject.commands.IngredientCommand;
+import fun.madeby.mbfrecipeproject.commands.UnitOfMeasureCommand;
 import fun.madeby.mbfrecipeproject.converters.IngredientToIngredientCommand;
 import fun.madeby.mbfrecipeproject.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import fun.madeby.mbfrecipeproject.domain.Ingredient;
@@ -9,13 +9,13 @@ import fun.madeby.mbfrecipeproject.domain.Recipe;
 import fun.madeby.mbfrecipeproject.domain.UnitOfMeasure;
 import fun.madeby.mbfrecipeproject.repositories.IngredientRepository;
 import fun.madeby.mbfrecipeproject.repositories.RecipeRepository;
+import fun.madeby.mbfrecipeproject.repositories.UnitOfMeasureRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.math.BigDecimal;
 import java.util.Optional;
 
@@ -30,6 +30,10 @@ class IngredientServiceImplTest {
 
     @Mock
     RecipeRepository recipeRepository;
+
+    @Mock
+    UnitOfMeasureRepository unitOfMeasureRepository;
+
 
     @InjectMocks
     IngredientServiceImpl ingredientServiceImpl;
@@ -52,6 +56,9 @@ class IngredientServiceImplTest {
     UnitOfMeasure unitOfMeasure1;
     Long unitOfMeasure1_Id = 33L;
 
+    UnitOfMeasureCommand unitOfMeasureCommand1;
+    Long unitOfMeasureC1_id = 3L;
+
 
     @BeforeEach
     void setUp() {
@@ -59,6 +66,10 @@ class IngredientServiceImplTest {
         unitOfMeasure1 = new UnitOfMeasure();
         unitOfMeasure1.setId(unitOfMeasure1_Id);
         unitOfMeasure1.setDescription("I am the unit of measure");
+
+        unitOfMeasureCommand1 = new UnitOfMeasureCommand();
+        unitOfMeasureCommand1.setId(unitOfMeasureC1_id);
+        unitOfMeasureCommand1.setDescription("I am the unit of measure command");
 
         ingredient1 = new Ingredient();
         ingredient1.setId(ing1_Id);
@@ -70,7 +81,7 @@ class IngredientServiceImplTest {
         ingredientCommand1.setId(ingredient1.getId());
         ingredientCommand1.setDescription(ingredient1.getDescription());
         ingredientCommand1.setRecipe_id(ingredientCommand1RecipeId);
-        //ingredientCommand1.setUom(unitOfMeasure1);
+        ingredientCommand1.setUom(unitOfMeasureCommand1);
 
         recipe1 = new Recipe();
         recipe1.setId(recipe1_id);
@@ -96,9 +107,34 @@ class IngredientServiceImplTest {
         assertNull(returnedIngredientCommand.getRecipe());
         assertNull(returnedIngredientCommand.getAmount());
         assertNull(returnedIngredientCommand.getUom());
+        verify(recipeRepository, times(1)).findById(anyLong());
+    }
 
+    @Test
+    void testSaveOrUpdateIngredientCommand_UomDoesNotExist() {
+        //given the following ensure confirmedUnitOfMeasureExists is empty
+        Optional<Recipe> optionalOfRecipe1 = Optional.of(recipe1);
+        Optional<UnitOfMeasure> emptyUnitOfMeasure1 = Optional.empty();
+
+        when(recipeRepository.findById(anyLong()))
+                .thenReturn(optionalOfRecipe1);
+        when(unitOfMeasureRepository.findById(anyLong()))
+                .thenReturn(emptyUnitOfMeasure1);
+        //when
+        Exception exception = assertThrows(RuntimeException.class, () -> {
+                    IngredientCommand returnedIngredientCommand = ingredientServiceImpl
+                            .saveOrUpdateIngredientCommand(ingredientCommand1);
+                });
+
+        String expectedMessage = "UOM NOT FOUND";
+        String actualMessage = exception.getMessage();
+
+        //then
+        assertTrue(actualMessage.contains(expectedMessage), "actualMessage does not contain expected message");
 
     }
+
+
 
     @Test
     void testGetIngredientById() {
@@ -113,6 +149,7 @@ class IngredientServiceImplTest {
                 .thenReturn(ingredientCommand1);
         when(ingredientServiceImpl.getIngredientById(anyLong())).
                 thenReturn(ingredientCommand1);
+
         //when
         IngredientCommand returnedIngredientCommand = ingredientServiceImpl.getIngredientById(ing1_Id);
 
@@ -124,12 +161,6 @@ class IngredientServiceImplTest {
         verify(ingredientToIngredientCommand, times(1)).convert(optionalConfirmed);
         verify(ingredientRepository, times(1)).findById(ing1_Id);
         assertEquals(ing1_Id, returnedIngredientCommand.getId());
-
-
-
-
-
-
 
     }
 

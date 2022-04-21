@@ -1,11 +1,14 @@
 package fun.madeby.mbfrecipeproject.services;
 
 import fun.madeby.mbfrecipeproject.commands.IngredientCommand;
+import fun.madeby.mbfrecipeproject.converters.IngredientCommandToIngredient;
 import fun.madeby.mbfrecipeproject.converters.IngredientToIngredientCommand;
 import fun.madeby.mbfrecipeproject.domain.Ingredient;
 import fun.madeby.mbfrecipeproject.domain.Recipe;
+import fun.madeby.mbfrecipeproject.domain.UnitOfMeasure;
 import fun.madeby.mbfrecipeproject.repositories.IngredientRepository;
 import fun.madeby.mbfrecipeproject.repositories.RecipeRepository;
+import fun.madeby.mbfrecipeproject.repositories.UnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,18 +22,24 @@ import java.util.Optional;
 
 @Slf4j
 @Service
-public class IngredientServiceImpl implements IngredientService{
+public class IngredientServiceImpl implements IngredientService {
     private final IngredientRepository INGREDIENT_REPOSITORY;
     private final RecipeRepository RECIPE_REPOSITORY;
+    private final UnitOfMeasureRepository UOM_REPOSITORY;
     private final IngredientToIngredientCommand INGREDIENT_TO_INGREDIENT_COMMAND;
+    private final IngredientCommandToIngredient INGREDIENT_COMMAND_TO_INGREDIENT;
 
 
     public IngredientServiceImpl(IngredientRepository ingredientsRepository,
                                  RecipeRepository recipe_repository,
-                                 IngredientToIngredientCommand ingredientToIngredientCommand) {
+                                 UnitOfMeasureRepository uom_repository,
+                                 IngredientToIngredientCommand ingredientToIngredientCommand,
+                                 IngredientCommandToIngredient ingredient_command_to_ingredient) {
         this.INGREDIENT_REPOSITORY = ingredientsRepository;
-        RECIPE_REPOSITORY = recipe_repository;
+        this.RECIPE_REPOSITORY = recipe_repository;
+        this.UOM_REPOSITORY = uom_repository;
         this.INGREDIENT_TO_INGREDIENT_COMMAND = ingredientToIngredientCommand;
+        this.INGREDIENT_COMMAND_TO_INGREDIENT = ingredient_command_to_ingredient;
     }
 
     @Override
@@ -50,30 +59,57 @@ public class IngredientServiceImpl implements IngredientService{
     }
 
     @Override
+    @Transactional
     public IngredientCommand saveOrUpdateIngredientCommand(IngredientCommand command) {
-        Ingredient ingredientToUpdate = new Ingredient();
-      Optional<Recipe>  retrievedCommandRecipe = RECIPE_REPOSITORY.findById(command.getRecipe_id());
 
-      if(retrievedCommandRecipe.isEmpty()) {
-          log.error("Ingredient command is detatched recipe " + command.getRecipe_id() + " cannot be found");
-          return new IngredientCommand();
-      } else {
-          Recipe recipe = retrievedCommandRecipe.get();
+        IngredientCommand retrievedSavedIngredientCommand = new IngredientCommand();
+        Ingredient ingredientBeingUpdated = new Ingredient();
+        Optional<Recipe> retrievedCommandRecipe = RECIPE_REPOSITORY.findById(command.getRecipe_id());
 
-          Optional<Ingredient> ingredientOptionalToUpdate = recipe.getIngredients()
-                  .stream()
-                  .filter(ingredient -> ingredient.getId().equals(command.getId()))
-                  .findFirst();
+        if (retrievedCommandRecipe.isEmpty()) {
+            log.error("Ingredient command is detatched recipe " + command.getRecipe_id() + " cannot be found");
+            return new IngredientCommand();
+        } else {
+            Recipe recipe = retrievedCommandRecipe.get();
 
-          if(ingredientOptionalToUpdate.isPresent()) {
-              ingredientToUpdate = ingredientOptionalToUpdate.get();
-              return INGREDIENT_TO_INGREDIENT_COMMAND.convert(ingredientToUpdate);
-          }
+            Optional<Ingredient> ingredientOptionalToUpdate = recipe.getIngredients()
+                    .stream()
+                    .filter(ingredient -> ingredient.getId().equals(command.getId()))
+                    .findFirst();
 
-      }
+            if (ingredientOptionalToUpdate.isPresent()) {
+                ingredientBeingUpdated = ingredientOptionalToUpdate.get();
+                ingredientBeingUpdated.setDescription(command.getDescription());
+                ingredientBeingUpdated.setAmount(command.getAmount());
+                //CHECK back to source, not direct from command object
+                Optional<UnitOfMeasure> confirmedUnitOfMeasureExists = UOM_REPOSITORY.findById(command.getUom().getId());
+                if (confirmedUnitOfMeasureExists.isPresent()) {
+                    ingredientBeingUpdated.setUom(confirmedUnitOfMeasureExists.get());
+                } else {
+                    throw new RuntimeException("UOM NOT FOUND");
+                }
+            } else
+                recipe.addIngredient(INGREDIENT_COMMAND_TO_INGREDIENT.convert(command));
 
-        return null;
+            Recipe savedRecipe = RECIPE_REPOSITORY.save(recipe);
+
+            retrievedSavedIngredientCommand = INGREDIENT_TO_INGREDIENT_COMMAND.convert(savedRecipe.getIngredients()
+                    .stream()
+                    .filter(ingredient -> ingredient.getId().equals(command.getId()))
+                    .findFirst()
+                    .get());
+
+        }
+
+        if(retrievedSavedIngredientCommand != null)
+            return retrievedSavedIngredientCommand;
+        else
+            throw new RuntimeException("ERROR @ SAVE - IngredientCommand could not be retrieved from saved Recipe");
     }
+
+
+
+
 
 
 }
