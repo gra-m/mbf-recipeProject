@@ -30,12 +30,12 @@
             <section class="row col-sm-12">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="card-title" th:text="${ingredient.recipe_id}+ ' ' + ${ingredient.id}">Edit Ingredient Information</h1>
+                        <h1 class="card-title" th:text="'Update Recipe ' +  ${ingredient.recipe_id} + ' Ingredient ' + ${ingredient.id}">Edit Ingredient Information</h1>
                         <section class="row">
 
                             <div class="col-sm-12 col-md-4 form-group">
                                 <label for="description">Description:</label>
-                                <input id="description" type="text" class="form-control" rows="3" th:field="*{description}"/>
+                                <input id="description" type="text" class="form-control"  th:field="*{description}"/>
                             </div>
 
                             <div class="col-sm-12 col-md-2 form-group">
