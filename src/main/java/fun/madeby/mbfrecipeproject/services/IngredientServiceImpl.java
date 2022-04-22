@@ -61,69 +61,92 @@ public class IngredientServiceImpl implements IngredientService {
     @Override
     @Transactional
     public IngredientCommand saveOrUpdateIngredientCommand(IngredientCommand command) {
+        Recipe recipe;
+        Ingredient updatingIngredient;
+        UnitOfMeasure uomExists;
+        Ingredient saveUpdateSuccessful;
+        Long commandId;
 
-        IngredientCommand retrievedSavedIngredientCommand;
-        Ingredient ingredientBeingUpdated;
-        Optional<Recipe> recipeIngredientCommandBelongsTo = RECIPE_REPOSITORY.findById(command.getRecipe_id());
-
-        if (recipeIngredientCommandBelongsTo.isEmpty()) {
+        Recipe retrievedRecipeIsVoid = retrieveAndTestRecipe(command);
+        if (retrievedRecipeIsVoid.getId() == null) {
             log.error("Ingredient command is detatched recipe " + command.getRecipe_id() + " cannot be found");
             return new IngredientCommand();
         } else {
-            Recipe recipe = recipeIngredientCommandBelongsTo.get();
+            recipe = retrievedRecipeIsVoid;
+            commandId = command.getId();
+        }
 
-            Optional<Ingredient> ingredientOptionalToUpdate = recipe.getIngredients()
-                    .stream()
-                    .filter(ingredient -> ingredient.getId().equals(command.getId()))
-                    .findFirst();
+        Ingredient isNewSave = retrieveAndTestIngredient(recipe, commandId);
+        if (isNewSave.getId() == null) {
+            Ingredient commandConvertedToIngredient = INGREDIENT_COMMAND_TO_INGREDIENT.convert(command);
+            assert commandConvertedToIngredient != null;
+            recipe.addIngredient(commandConvertedToIngredient);
 
-            if (ingredientOptionalToUpdate.isPresent()) {
-                ingredientBeingUpdated = ingredientOptionalToUpdate.get();
-                ingredientBeingUpdated.setDescription(command.getDescription());
-                ingredientBeingUpdated.setAmount(command.getAmount());
-                //CHECK back to source, not direct from command object
-                Optional<UnitOfMeasure> confirmedUnitOfMeasureExists = UOM_REPOSITORY.findById(command.getUom().getId());
-                if (confirmedUnitOfMeasureExists.isPresent()) {
-                    ingredientBeingUpdated.setUom(confirmedUnitOfMeasureExists.get());
-                } else {
+        } else {
+            updatingIngredient = isNewSave;
+                updatingIngredient.setDescription(command.getDescription());
+                updatingIngredient.setAmount(command.getAmount());
+                UnitOfMeasure uomNotInDb = retrieveAndTestUnitOfMeasure(command.getUom().getId());
+                if (uomNotInDb.getId() == null)
                     throw new RuntimeException("UOM NOT FOUND");
-                }
-            } else {
-                Ingredient commandConvertedToIngredient = INGREDIENT_COMMAND_TO_INGREDIENT.convert(command);
-                assert commandConvertedToIngredient != null;
-                recipe.addIngredient(commandConvertedToIngredient);
+                else
+                    uomExists = uomNotInDb;
+                    updatingIngredient.setUom(uomExists);
             }
 
             Recipe savedRecipe = RECIPE_REPOSITORY.save(recipe);
+            Ingredient retrievalFailed = retrieveSavedIngredient(savedRecipe, commandId);
 
-            retrievedSavedIngredientCommand = INGREDIENT_TO_INGREDIENT_COMMAND.convert(savedRecipe.getIngredients()
-                    .stream()
-                    .filter(ingredients -> ingredients.getId().equals(command.getId()))
-                    .findFirst()
-                    .get());
-
-            /*Ingredient ingredientFound = new Ingredient();
-            for(Ingredient ingredient : savedRecipe.getIngredients()) {
-                if(ingredient.getId().equals(command.getId())){
-                    ingredientFound = ingredient;
-                    break;
-                }
-            }
-            ingredientFound.setId(3L);
-            ingredientFound.setDescription("Why");
-            ingredientFound.setAmount(new BigDecimal(3));
-
-            retrievedSavedIngredientCommand =  INGREDIENT_TO_INGREDIENT_COMMAND.convert(ingredientFound);
-*/
-
-
-        }
-
-        if (retrievedSavedIngredientCommand != null)
-            return retrievedSavedIngredientCommand;
-        else
+        if (retrievalFailed.getId() == null)
             throw new RuntimeException("ERROR @ SAVE - IngredientCommand could not be retrieved from saved Recipe");
+        else
+            saveUpdateSuccessful = retrievalFailed;
+            return INGREDIENT_TO_INGREDIENT_COMMAND.convert(saveUpdateSuccessful);
     }
 
+    // region HELPER METHODS
+
+    private Ingredient retrieveSavedIngredient(Recipe savedRecipe, Long ingredientId) {
+        Ingredient retrievalFailed = new Ingredient();
+        retrievalFailed.setId(null);
+
+        Optional<Ingredient> ingredientRetrieved = savedRecipe.getIngredients()
+                .stream()
+                .filter(ingredient -> ingredient.getId().equals(ingredientId))
+                .findFirst();
+
+        return ingredientRetrieved.orElse(retrievalFailed);
+    }
+
+    private UnitOfMeasure retrieveAndTestUnitOfMeasure(Long uomId) {
+        UnitOfMeasure uomNotInDb = new UnitOfMeasure();
+        uomNotInDb.setId(null);
+
+        Optional<UnitOfMeasure> uomExists = UOM_REPOSITORY.findById(uomId);
+        return uomExists.orElse(uomNotInDb);
+    }
+
+    private Recipe retrieveAndTestRecipe(IngredientCommand command) {
+        Recipe voidRecipe = new Recipe();
+        voidRecipe.setId(null);
+        if (command.getId() == null)
+            return voidRecipe;
+
+        Optional<Recipe> retrievedOptionalRecipe = RECIPE_REPOSITORY.findById(command.getRecipe_id());
+        return retrievedOptionalRecipe.orElse(voidRecipe);
+    }
+
+    private Ingredient retrieveAndTestIngredient(Recipe recipe, Long ingredientId) {
+        Ingredient isNewSave = new Ingredient();
+        isNewSave.setId(null);
+
+        Optional<Ingredient> isUpdate = recipe.getIngredients()
+                .stream()
+                .filter(ingredient -> ingredient.getId().equals(ingredientId))
+                .findFirst();
+        return isUpdate.orElse(isNewSave);
+    }
+
+    //endregion
 
 }
