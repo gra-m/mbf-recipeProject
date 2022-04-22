@@ -76,7 +76,7 @@ public class IngredientServiceImpl implements IngredientService {
             commandId = command.getId();
         }
 
-        Ingredient isNewSave = retrieveAndTestIngredient(recipe, commandId);
+        Ingredient isNewSave = retrieveIngredient(recipe, commandId);
         if (isNewSave.getId() == null) {
             Ingredient commandConvertedToIngredient = INGREDIENT_COMMAND_TO_INGREDIENT.convert(command);
             assert commandConvertedToIngredient != null;
@@ -95,7 +95,7 @@ public class IngredientServiceImpl implements IngredientService {
             }
 
             Recipe savedRecipe = RECIPE_REPOSITORY.save(recipe);
-            Ingredient retrievalFailed = retrieveSavedIngredient(savedRecipe, commandId);
+            Ingredient retrievalFailed = retrieveIngredient(savedRecipe, commandId);
 
         if (retrievalFailed.getId() == null)
             throw new RuntimeException("ERROR @ SAVE - IngredientCommand could not be retrieved from saved Recipe");
@@ -106,7 +106,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     // region HELPER METHODS
 
-    private Ingredient retrieveSavedIngredient(Recipe savedRecipe, Long ingredientId) {
+    private Ingredient retrieveIngredient(Recipe savedRecipe, Long ingredientId) {
         Ingredient retrievalFailed = new Ingredient();
         retrievalFailed.setId(null);
 
@@ -134,17 +134,6 @@ public class IngredientServiceImpl implements IngredientService {
 
         Optional<Recipe> retrievedOptionalRecipe = RECIPE_REPOSITORY.findById(command.getRecipe_id());
         return retrievedOptionalRecipe.orElse(voidRecipe);
-    }
-
-    private Ingredient retrieveAndTestIngredient(Recipe recipe, Long ingredientId) {
-        Ingredient isNewSave = new Ingredient();
-        isNewSave.setId(null);
-
-        Optional<Ingredient> isUpdate = recipe.getIngredients()
-                .stream()
-                .filter(ingredient -> ingredient.getId().equals(ingredientId))
-                .findFirst();
-        return isUpdate.orElse(isNewSave);
     }
 
     //endregion
