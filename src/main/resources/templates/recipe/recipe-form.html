@@ -102,14 +102,18 @@
                                 <h1 class="card-title">Ingredients</h1>
                             </div>
                             <div class="row col-md-12">
-                                <div class=" col-md-6">
-                                    <a class="btn btn-primary" href="#"
-                                       th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}" role="button">Edit</a>
-                                </div>
-                                <div class="col-md-6">
-                                    <a class="btn btn-primary" href="#"
-                                       th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/new'}" role="button">New</a>
-                                </div>
+
+                                <div class="btn-group col-md-8 m-md-auto" role="group">
+
+                                    <div class="row col-md-12">
+                                    <button class="btn-sm btn-secondary col-md-6" href="#"
+                                       th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}" role="button">Edit</button>
+                                    <button class="btn-sm btn-secondary col-md-6" href="#"
+                                       th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/new'}" role="button">New</button>
+                                        </div>
+
+
+                                    </div>
                             </div>
                         </div>
                         <div class="row">
