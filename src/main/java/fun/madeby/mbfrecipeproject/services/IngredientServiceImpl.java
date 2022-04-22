@@ -106,7 +106,7 @@ public class IngredientServiceImpl implements IngredientService {
 
     // region HELPER METHODS
 
-    private Ingredient retrieveIngredient(Recipe savedRecipe, Long ingredientId) {
+    Ingredient retrieveIngredient(Recipe savedRecipe, Long ingredientId) {
         Ingredient retrievalFailed = new Ingredient();
         retrievalFailed.setId(null);
 

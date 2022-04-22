@@ -2,9 +2,7 @@ package fun.madeby.mbfrecipeproject.services;
 
 import fun.madeby.mbfrecipeproject.commands.IngredientCommand;
 import fun.madeby.mbfrecipeproject.commands.UnitOfMeasureCommand;
-import fun.madeby.mbfrecipeproject.converters.IngredientCommandToIngredient;
 import fun.madeby.mbfrecipeproject.converters.IngredientToIngredientCommand;
-import fun.madeby.mbfrecipeproject.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import fun.madeby.mbfrecipeproject.domain.Ingredient;
 import fun.madeby.mbfrecipeproject.domain.Recipe;
 import fun.madeby.mbfrecipeproject.domain.UnitOfMeasure;
@@ -42,11 +40,7 @@ class IngredientServiceImplTest {
     @Mock
     IngredientToIngredientCommand ingredientToIngredientCommand;
 
-    @Mock
-    IngredientCommandToIngredient ingredientCommandToIngredient;
 
-    @InjectMocks
-    UnitOfMeasureToUnitOfMeasureCommand unitOfMeasureToUnitOfMeasureCommand;
 
     Recipe recipe1;
     Long recipe1_id = 4L;
@@ -56,19 +50,14 @@ class IngredientServiceImplTest {
     IngredientCommand ingredientCommand1;
     Long ingredientCommand1RecipeId = 4L;
 
-
-
-
-
     IngredientCommand ingredientCommand2;
     Long ingC2_Id = 500L;
-    Ingredient ingredient2;
 
     UnitOfMeasure unitOfMeasure1;
     Long unitOfMeasure1_Id = 33L;
 
     UnitOfMeasureCommand unitOfMeasure1Command;
-
+    Ingredient ingredient2;
 
     @BeforeEach
     void setUp() {
@@ -110,9 +99,9 @@ class IngredientServiceImplTest {
         ingredient2.setUom(unitOfMeasure1);
     }
 
-    //region SAVE OR UPDATE IngredientCommand HAPPY
+    //region SAVE OR UPDATE IngredientCommand
 
-    /*@Test
+    @Test
     void testSaveOrUpdateIngredientCommand_UpdatePath(){
         //given
         IngredientCommand command = new IngredientCommand();
@@ -131,25 +120,35 @@ class IngredientServiceImplTest {
         when(unitOfMeasureRepository.findById(anyLong()))
                 .thenReturn(uomOptional);
         when(recipeRepository.save(any())).thenReturn(savedRecipe);
+        // bypassed retrieval of recipe below == own test.
+        when(ingredientToIngredientCommand.convert(any(Ingredient.class)))
+                .thenReturn(command);
 
-        System.out.println("Before" + savedRecipe);
         //when
         IngredientCommand savedCommand = ingredientServiceImpl.saveOrUpdateIngredientCommand(command);
 
         //then
-
-        //assertNotNull(savedCommand);
+        assertNotNull(savedCommand);
         verify(recipeRepository, times(1)).findById(anyLong());
         verify(recipeRepository, times(1)).save(any(Recipe.class));
-        assertEquals(Long.valueOf(3L), savedCommand.getId());
-        verify(recipeRepository, times(1)).findById(anyLong());
-        verify(recipeRepository, times(1)).save(any(Recipe.class));
+        verify(ingredientToIngredientCommand, times(1)).convert(any(Ingredient.class));
+        assertEquals(ing1_Id, savedCommand.getId());
+        assertEquals(recipe1_id, savedCommand.getRecipe_id());
 
+    }
 
-    } */
+    @Test
+    void retrieveIngredient() {
+        //given
+        Recipe savedRecipe = recipe1;
 
+        //when
+        Ingredient retrievedIngredient = ingredientServiceImpl.retrieveIngredient(savedRecipe, ing1_Id);
 
+        assertNotNull(retrievedIngredient);
+        assertEquals(ing1_Id, retrievedIngredient.getId());
 
+    }
 
     //region SAVE OR UPDATE IngredientCommand ERROR PATHS
 
@@ -198,17 +197,10 @@ class IngredientServiceImplTest {
     }
 
     //endregion
-
-
     //endregion
-
-
 
     @Test
     void testGetIngredientById() {
-        // I've created an ingredientRepository to return ingredient directly by its id rather
-        // than streaming/filter/mapping through a returned set from recipe
-        //given
         Optional<Ingredient> ingredient1Optional = Optional.of(ingredient1);
         Ingredient optionalConfirmed = ingredient1Optional.get();
         when(ingredientRepository.findById(anyLong()))
@@ -221,7 +213,6 @@ class IngredientServiceImplTest {
         //when
         IngredientCommand returnedIngredientCommand = ingredientServiceImpl.getIngredientById(ing1_Id);
 
-
         //then
         assertNotNull(returnedIngredientCommand, "command was not returned");
         assertNotNull(ingredient1Optional, "Even though created from ingredient1, ingredient1Optional is null.");
@@ -231,13 +222,5 @@ class IngredientServiceImplTest {
         assertEquals(ing1_Id, returnedIngredientCommand.getId());
 
     }
-
-
-
-
-
-
-
-
 
 }
