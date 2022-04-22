@@ -27,13 +27,12 @@ public class IndexController {
 
     @RequestMapping({"", "/", "/index"})
     public String getIndex(Model model){
+       log.debug("IndexC_GET_/index '/' '' ");
        ArrayList<Recipe> recipeArrayList = RECIPE_SERVICE_IMPL.findAll();
       if(recipeArrayList.size() > 0) {
           model.addAttribute("recipes", recipeArrayList);
-          System.out.println("Happy path, recipes returned");
           return "index";
       }
-        System.out.println("unhappy path, returning null from getIndex findAll");
       return null;
     }
 }

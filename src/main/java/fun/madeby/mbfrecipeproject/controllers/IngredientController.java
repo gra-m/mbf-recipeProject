@@ -31,7 +31,7 @@ public class IngredientController {
     @GetMapping
     @RequestMapping("/recipe/{id}/ingredients")
     public String listRecipeIngredients(@PathVariable String id, Model model) {
-        log.debug("/recipe/id/ingredients endpoint reached");
+        log.debug("IC_GET_/recipe/{id}/ingredients");
 
         model.addAttribute("recipe", RECIPE_SERVICE.getRecipeById(Long.valueOf(id)));
 
@@ -41,64 +41,38 @@ public class IngredientController {
     @GetMapping
     @RequestMapping("/recipe/ingredients/{id}/show")
     public String showIngredient(@PathVariable String id, Model model) {
-        log.debug("/recipe/{recipe_id}/ingredients/{id}/show endpoint reached");
+        log.debug("IC_GET_/recipe/ingredients/{id}");
 
         model.addAttribute("ingredient", INGREDIENT_SERVICE.getIngredientById(Long.valueOf(id)));
 
         return "recipe/ingredients/show";
-
     }
 
     @GetMapping
     @RequestMapping("/recipe/ingredients/{id}/update")
     public String updateRecipeIngredient(@PathVariable String id, Model model){
+        log.debug("IC_GET_recipe/ingredients/{id}/update");
 
         IngredientCommand commandMustKnowRecipe = INGREDIENT_SERVICE.getIngredientById(Long.valueOf(id));
-        log.debug("recipe/ingredients/{id}/update - command knows itself: " + commandMustKnowRecipe.getId());
-        log.debug("COMMAND DOES KNOW RECIPE" + commandMustKnowRecipe.getRecipe_id());
-
         model.addAttribute("ingredient", commandMustKnowRecipe);
 
-
-        //
-
         model.addAttribute("uomList", UOM_SERVICE.listAllUoms());
+
         return "recipe/ingredients/ingredient-form";
     }
 
+
     @PostMapping("/recipe/{recipeId}/ingredient")
-    public String saveOrUpdate(@ModelAttribute IngredientCommand command){
-
-
-        try {
-            Long commandId = command.getId();
-            if(commandId == null)
-                throw new RuntimeException();
-        }catch (RuntimeException e) {
-           e.printStackTrace();
-            System.out.println(e + "THE COMMAND ID IS NULL");
-        }
-
-        try {
-            Long commandRecipeId = command.getRecipe_id();
-            if(commandRecipeId == null)
-                throw new RuntimeException();
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            System.out.println("DOES NOT KNOW RECIPE ID");
-        }
-
+    public String saveOrUpdateIngredientToRecipe(@ModelAttribute IngredientCommand command){
+        log.debug("IC_POST_/recipe/{recipeId}/ingredient");
 
         IngredientCommand savedCommand = new IngredientCommand();
-        log.info("recipe/{recipeId}/ingredient.. It has Id: " + command.getRecipe_id());
-
         try {
             savedCommand = INGREDIENT_SERVICE.saveOrUpdateIngredientCommand(command);
         }catch (RuntimeException e){
             System.out.println("command has Id of: " + command.getId() + "\ncommand has recipe value of:" +
                     command.getRecipe_id());
         }
-
 
         try {
             Long commandId = savedCommand.getId();
@@ -115,13 +89,8 @@ public class IngredientController {
                 throw new RuntimeException();
         } catch (RuntimeException e) {
             e.printStackTrace();
-            System.out.println("AFTER SAVING DOES NOT KNOW RECIPE ID");
+            System.out.println("AFTER SAVING COMMAND HAS NO RECIPE ID");
         }
-
-        log.info("saved recipe id:" + savedCommand.getRecipe_id());
-        log.info("saved ingredient id:" + savedCommand.getId());
-
-        //return "redirect:/recipe/ingredients/" + savedCommand.getId() + "/show";
 
         return "redirect:/recipe/ingredients/" + savedCommand.getId() + "/show";
     }

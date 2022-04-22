@@ -110,7 +110,7 @@ class IngredientServiceImplTest {
         ingredient2.setUom(unitOfMeasure1);
     }
 
-    //region SAVE OR UPDATE IngredientCommand
+    //region SAVE OR UPDATE IngredientCommand HAPPY
 
     /*@Test
     void testSaveOrUpdateIngredientCommand_UpdatePath(){
@@ -151,7 +151,7 @@ class IngredientServiceImplTest {
 
 
 
-    //region ERROR PATHS
+    //region SAVE OR UPDATE IngredientCommand ERROR PATHS
 
     @Test
     void testSaveOrUpdateIngredientCommand_RecipeDoesNotExist() {
