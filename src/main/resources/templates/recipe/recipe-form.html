@@ -101,8 +101,15 @@
                             <div class="">
                                 <h1 class="card-title">Ingredients</h1>
                             </div>
-                            <div class="row col-md-6 m-sm-auto">
-                                <a class="btn btn-primary" href="#" th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}" role="button">Edit</a>
+                            <div class="row col-md-12">
+                                <div class=" col-md-6">
+                                    <a class="btn btn-primary" href="#"
+                                       th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}" role="button">Edit</a>
+                                </div>
+                                <div class="col-md-6">
+                                    <a class="btn btn-primary" href="#"
+                                       th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/new'}" role="button">New</a>
+                                </div>
                             </div>
                         </div>
                         <div class="row">

@@ -65,22 +65,24 @@ public class IngredientServiceImpl implements IngredientService {
         Ingredient updatingIngredient;
         UnitOfMeasure uomExists;
         Ingredient saveUpdateSuccessful;
-        Long commandId;
+        Long newUpdatedIngredientID = command.getId();
 
         Recipe retrievedRecipeIsVoid = retrieveAndTestRecipe(command);
         if (retrievedRecipeIsVoid.getId() == null) {
             log.error("Ingredient command is detatched recipe " + command.getRecipe_id() + " cannot be found");
             return new IngredientCommand();
-        } else {
+        } else
             recipe = retrievedRecipeIsVoid;
-            commandId = command.getId();
-        }
 
-        Ingredient isNewSave = retrieveIngredient(recipe, commandId);
-        if (isNewSave.getId() == null) {
+
+        Ingredient isNewSave = retrieveIngredient(recipe, command.getId());
+        if (isNewSave.getId() == null) {// todo create saveIngredient in Service
+            log.info("converting and adding commandIng to RECIPE");
             Ingredient commandConvertedToIngredient = INGREDIENT_COMMAND_TO_INGREDIENT.convert(command);
             assert commandConvertedToIngredient != null;
-            recipe.addIngredient(commandConvertedToIngredient);
+            Ingredient savedIngredient = INGREDIENT_REPOSITORY.save(commandConvertedToIngredient);
+            newUpdatedIngredientID = savedIngredient.getId();
+            recipe.addIngredient(savedIngredient);
 
         } else {
             updatingIngredient = isNewSave;
@@ -95,7 +97,7 @@ public class IngredientServiceImpl implements IngredientService {
             }
 
             Recipe savedRecipe = RECIPE_REPOSITORY.save(recipe);
-            Ingredient retrievalFailed = retrieveIngredient(savedRecipe, commandId);
+            Ingredient retrievalFailed = retrieveIngredient(savedRecipe, newUpdatedIngredientID);
 
         if (retrievalFailed.getId() == null)
             throw new RuntimeException("ERROR @ SAVE - IngredientCommand could not be retrieved from saved Recipe");
@@ -129,7 +131,7 @@ public class IngredientServiceImpl implements IngredientService {
     private Recipe retrieveAndTestRecipe(IngredientCommand command) {
         Recipe voidRecipe = new Recipe();
         voidRecipe.setId(null);
-        if (command.getId() == null)
+        if (command.getId() == null && command.getRecipe_id() == null)
             return voidRecipe;
 
         Optional<Recipe> retrievedOptionalRecipe = RECIPE_REPOSITORY.findById(command.getRecipe_id());

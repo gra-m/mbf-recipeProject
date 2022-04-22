@@ -49,7 +49,7 @@ class IngredientControllerTest {
     Ingredient ingredient1;
     IngredientCommand ingredientCommand1;
     Long ingC1_id = 444L;
-
+    Set<UnitOfMeasureCommand> unitOfMeasureSet;
 
     @BeforeEach
     void setUp() {
@@ -66,6 +66,8 @@ class IngredientControllerTest {
         ingredientCommand1.setRecipe_id(recipe1_id);
         ingredientSet.add(ingredient1);
         recipe1.setIngredients(ingredientSet);
+
+        unitOfMeasureSet = new HashSet<>();
     }
 
     @Test
@@ -109,7 +111,6 @@ class IngredientControllerTest {
     @Test
     void updateRecipeIngredient() throws Exception {
         //wnen
-        Set<UnitOfMeasureCommand> unitOfMeasureSet = new HashSet<>();
         when(ingredientService.getIngredientById(anyLong())).thenReturn(ingredientCommand1);
         when(uomService.listAllUoms()).thenReturn(unitOfMeasureSet);
 
@@ -120,6 +121,20 @@ class IngredientControllerTest {
                 .andExpect(MockMvcResultMatchers.model().attributeExists("ingredient"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("uomList"));
         verify(ingredientService, times(1)).getIngredientById(anyLong());
+        verify(uomService, times(1)).listAllUoms();
+    }
+
+    @Test
+    void testCreateNewIngredient() throws Exception {
+        //when
+        when(uomService.listAllUoms()).thenReturn(unitOfMeasureSet);
+
+        //then
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/ingredient/new"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.view().name("recipe/ingredients/ingredient-form"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("ingredient"))
+                .andExpect(MockMvcResultMatchers.model().attributeExists("uomList"));
         verify(uomService, times(1)).listAllUoms();
     }
 

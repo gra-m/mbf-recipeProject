@@ -138,6 +138,17 @@ class IngredientServiceImplTest {
     }
 
     @Test
+    void testSaveOrUpdateIngredientCommand_NewPath() {
+        //given
+
+
+        //when
+
+
+        //then
+    }
+
+    @Test
     void retrieveIngredient() {
         //given
         Recipe savedRecipe = recipe1;

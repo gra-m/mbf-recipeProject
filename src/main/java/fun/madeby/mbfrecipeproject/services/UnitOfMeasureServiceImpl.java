@@ -43,4 +43,36 @@ public class UnitOfMeasureServiceImpl implements UnitOfMeasureService {
                .collect(Collectors.toSet());
     }
 
+    /**Created as wanted to reuse the ingredient form but was wary
+     * of a situation where a blank Uom would not be available.
+     * @return UnitOfMeasureCommand
+     */
+    @Override
+    public UnitOfMeasureCommand getOrCreateBlankDescriptionUnitOfMeasureCommand() {
+        UnitOfMeasure savedBlankUom = new UnitOfMeasure();
+
+        Optional<UnitOfMeasure> blankAlreadyExistsInDb = getUnitOfMeasureByDescription("");
+
+        if(blankAlreadyExistsInDb.isPresent())
+            return UOM_To_UOM_COMMAND.convert(blankAlreadyExistsInDb.get());
+        else {
+            UnitOfMeasure newIngredientFormNeedsBlankUOM = new UnitOfMeasure();
+            newIngredientFormNeedsBlankUOM.setDescription("");
+            savedBlankUom = saveUnitOfMeasure(newIngredientFormNeedsBlankUOM);
+            return UOM_To_UOM_COMMAND.convert(savedBlankUom);
+        }
+    }
+
+
+
+    @Override
+    public Optional<UnitOfMeasure> getUnitOfMeasureByDescription(String description) {
+        return UOM_REPOSITORY.findUnitOfMeasureByDescription(description);
+    }
+
+    @Override
+    public UnitOfMeasure saveUnitOfMeasure(UnitOfMeasure newUnitOfMeasure) {
+        return UOM_REPOSITORY.save(newUnitOfMeasure);
+    }
+
 }

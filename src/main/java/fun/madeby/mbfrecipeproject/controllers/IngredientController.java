@@ -1,6 +1,7 @@
 package fun.madeby.mbfrecipeproject.controllers;
 
 import fun.madeby.mbfrecipeproject.commands.IngredientCommand;
+import fun.madeby.mbfrecipeproject.commands.UnitOfMeasureCommand;
 import fun.madeby.mbfrecipeproject.services.IngredientService;
 import fun.madeby.mbfrecipeproject.services.RecipeService;
 import fun.madeby.mbfrecipeproject.services.UnitOfMeasureService;
@@ -28,8 +29,7 @@ public class IngredientController {
     }
 
 
-    @GetMapping
-    @RequestMapping("/recipe/{id}/ingredients")
+    @GetMapping("/recipe/{id}/ingredients")
     public String listRecipeIngredients(@PathVariable String id, Model model) {
         log.debug("IC_GET_/recipe/{id}/ingredients");
 
@@ -38,8 +38,7 @@ public class IngredientController {
         return "recipe/ingredients/list";
     }
 
-    @GetMapping
-    @RequestMapping("/recipe/ingredients/{id}/show")
+    @GetMapping("/recipe/ingredients/{id}/show")
     public String showIngredient(@PathVariable String id, Model model) {
         log.debug("IC_GET_/recipe/ingredients/{id}");
 
@@ -48,8 +47,7 @@ public class IngredientController {
         return "recipe/ingredients/show";
     }
 
-    @GetMapping
-    @RequestMapping("/recipe/ingredients/{id}/update")
+    @GetMapping("/recipe/ingredients/{id}/update")
     public String updateRecipeIngredient(@PathVariable String id, Model model){
         log.debug("IC_GET_recipe/ingredients/{id}/update");
 
@@ -61,6 +59,23 @@ public class IngredientController {
         return "recipe/ingredients/ingredient-form";
     }
 
+    @GetMapping("/recipe/{recipeId}/ingredient/new")
+    public String createNewIngredient(@PathVariable String recipeId, Model model ){
+        log.debug("IC_GET_/recipe/{recipeId}/ingredient/new");
+
+
+        UnitOfMeasureCommand blankUomCommand = UOM_SERVICE.getOrCreateBlankDescriptionUnitOfMeasureCommand();
+
+        IngredientCommand newIngredient = new IngredientCommand();
+        newIngredient.setRecipe_id(Long.valueOf(recipeId));
+        newIngredient.setUom(blankUomCommand);
+
+        model.addAttribute("ingredient", newIngredient);
+        model.addAttribute("uomList", UOM_SERVICE.listAllUoms());
+
+        return "recipe/ingredients/ingredient-form";
+
+    }
 
     @PostMapping("/recipe/{recipeId}/ingredient")
     public String saveOrUpdateIngredientToRecipe(@ModelAttribute IngredientCommand command){
