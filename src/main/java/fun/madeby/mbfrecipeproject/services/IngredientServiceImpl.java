@@ -80,7 +80,7 @@ public class IngredientServiceImpl implements IngredientService {
             log.info("converting and adding commandIng to RECIPE");
             Ingredient commandConvertedToIngredient = INGREDIENT_COMMAND_TO_INGREDIENT.convert(command);
             assert commandConvertedToIngredient != null;
-            Ingredient savedIngredient = INGREDIENT_REPOSITORY.save(commandConvertedToIngredient);
+            Ingredient savedIngredient = saveIngredient(commandConvertedToIngredient);
             newUpdatedIngredientID = savedIngredient.getId();
             recipe.addIngredient(savedIngredient);
 
@@ -104,6 +104,11 @@ public class IngredientServiceImpl implements IngredientService {
         else
             saveUpdateSuccessful = retrievalFailed;
             return INGREDIENT_TO_INGREDIENT_COMMAND.convert(saveUpdateSuccessful);
+    }
+
+    @Override
+    public Ingredient saveIngredient(Ingredient ingredient) {
+        return INGREDIENT_REPOSITORY.save(ingredient);
     }
 
     // region HELPER METHODS

@@ -1,6 +1,7 @@
 package fun.madeby.mbfrecipeproject.services;
 
 import fun.madeby.mbfrecipeproject.commands.IngredientCommand;
+import fun.madeby.mbfrecipeproject.domain.Ingredient;
 
 
 /**
@@ -11,4 +12,5 @@ public interface IngredientService {
 
     IngredientCommand getIngredientById(Long id);
     IngredientCommand saveOrUpdateIngredientCommand(IngredientCommand command);
+    Ingredient saveIngredient(Ingredient ingredient);
 }

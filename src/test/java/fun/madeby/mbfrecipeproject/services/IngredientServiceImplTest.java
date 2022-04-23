@@ -102,6 +102,22 @@ class IngredientServiceImplTest {
     //region SAVE OR UPDATE IngredientCommand
 
     @Test
+    void TestStandardSaveIngredient(){
+        // given
+        Ingredient ingredientToBeSaved = ingredient2;
+        when(ingredientRepository.save(any(Ingredient.class))).thenReturn(ingredientToBeSaved);
+
+        //when
+        Ingredient savedIngredient = ingredientServiceImpl.saveIngredient(ingredient2);
+
+        assertNotNull(savedIngredient);
+        assertEquals(ingredient2.getId(), savedIngredient.getId());
+        assertEquals(ingredient2.getDescription(), savedIngredient.getDescription());
+        assertEquals(ingredient2.getAmount(), savedIngredient.getAmount());
+        assertEquals(ingredient2.getUom(), savedIngredient.getUom());
+    }
+
+    @Test
     void testSaveOrUpdateIngredientCommand_UpdatePath(){
         //given
         IngredientCommand command = new IngredientCommand();
