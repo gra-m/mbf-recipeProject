@@ -40,7 +40,7 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
     @Transactional
     public void onApplicationEvent(ContextRefreshedEvent event) {
         log.debug("onApplicationEvent: ContextRefreshedEvent Triggered");
-        List<UnitOfMeasure> uOMSet = (List<UnitOfMeasure>) UNIT_OF_MEASURE_SERVICE_IMPL.findAll();
+        List<UnitOfMeasure> uOMSet = (List<UnitOfMeasure>) UNIT_OF_MEASURE_SERVICE_IMPL.getAllUomsAsIterable();
         try {
             if (uOMSet.size() == 0)
                 throw new RuntimeException("data.sql has not initialised");
@@ -83,15 +83,15 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
         ingredient7.setAmount(new BigDecimal(".25"));
         ingredient8.setAmount(new BigDecimal(1));
         ingredient9.setAmount(new BigDecimal(".75"));
-        ingredient1.setUom(UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("").get());
-        ingredient2.setUom(UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("").get());
-        ingredient3.setUom(UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("").get());
-        ingredient4.setUom(UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("").get());
-        ingredient5.setUom(UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("teaspoon").get());
-        ingredient6.setUom(UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("cup").get());
-        ingredient7.setUom(UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("cup").get());
-        ingredient8.setUom(UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("teaspoon").get());
-        ingredient9.setUom(UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("teaspoon").get());
+        ingredient1.setUom(UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("").get());
+        ingredient2.setUom(UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("").get());
+        ingredient3.setUom(UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("").get());
+        ingredient4.setUom(UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("").get());
+        ingredient5.setUom(UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("teaspoon").get());
+        ingredient6.setUom(UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("cup").get());
+        ingredient7.setUom(UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("cup").get());
+        ingredient8.setUom(UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("teaspoon").get());
+        ingredient9.setUom(UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("teaspoon").get());
         ingredient1.setRecipe(recipe);
         ingredient2.setRecipe(recipe);
         ingredient3.setRecipe(recipe);
@@ -136,22 +136,22 @@ public class DataLoader implements ApplicationListener<ContextRefreshedEvent> {
        ///////////////////////////////////////////////////////////////////////////////////
         Recipe recipe2 = new Recipe();
         //Lime Marinade
-        Ingredient ingredientA = new Ingredient("lime juice", new BigDecimal(".25"), UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("cup").get(), recipe2);
-        Ingredient ingredientB = new Ingredient("salt", new BigDecimal(".25"), UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("teaspoon").get(), recipe2);
-        Ingredient ingredientC = new Ingredient("black pepper", new BigDecimal(1), UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("pinch").get(), recipe2);
-        Ingredient ingredientD = new Ingredient("olive oil", new BigDecimal(".33"), UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("tablespoon").get(), recipe2);
-        Ingredient ingredientE = new Ingredient("honey", new BigDecimal(4), UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("teaspoon").get(), recipe2);
-        Ingredient ingredientF = new Ingredient("coriander/cilantro", new BigDecimal(".5"), UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("cup").get(), recipe2);
+        Ingredient ingredientA = new Ingredient("lime juice", new BigDecimal(".25"), UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("cup").get(), recipe2);
+        Ingredient ingredientB = new Ingredient("salt", new BigDecimal(".25"), UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("teaspoon").get(), recipe2);
+        Ingredient ingredientC = new Ingredient("black pepper", new BigDecimal(1), UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("pinch").get(), recipe2);
+        Ingredient ingredientD = new Ingredient("olive oil", new BigDecimal(".33"), UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("tablespoon").get(), recipe2);
+        Ingredient ingredientE = new Ingredient("honey", new BigDecimal(4), UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("teaspoon").get(), recipe2);
+        Ingredient ingredientF = new Ingredient("coriander/cilantro", new BigDecimal(".5"), UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("cup").get(), recipe2);
 
         //Chicken
-        Ingredient ingredientG = new Ingredient("chicken legs (thighs and drumsticks attached)", new BigDecimal(4), UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("full").get(), recipe2);
-        Ingredient ingredientH = new Ingredient("chicken breasts", new BigDecimal(2), UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("full").get(), recipe2);
-        Ingredient ingredientI = new Ingredient("salt", new BigDecimal(1), UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("teaspoon").get(), recipe2);
-        Ingredient ingredientJ = new Ingredient("black pepper", new BigDecimal(".25"), UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("teaspoon").get(), recipe2);
-        Ingredient ingredientK = new Ingredient("of dukkah, divided", new BigDecimal(5), UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("tablespoon").get(), recipe2);
-        Ingredient ingredientL = new Ingredient("Oil", new BigDecimal(".01"), UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("").get(), recipe2);
-        Ingredient ingredientM = new Ingredient("pomegranate seeds, for garnish (optional)", new BigDecimal(".25"), UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("cup").get(), recipe2);
-        Ingredient ingredientN = new Ingredient("small pita, for serving", new BigDecimal(6), UNIT_OF_MEASURE_SERVICE_IMPL.findUnitOfMeasurementByDescription("round").get(), recipe2);
+        Ingredient ingredientG = new Ingredient("chicken legs (thighs and drumsticks attached)", new BigDecimal(4), UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("full").get(), recipe2);
+        Ingredient ingredientH = new Ingredient("chicken breasts", new BigDecimal(2), UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("full").get(), recipe2);
+        Ingredient ingredientI = new Ingredient("salt", new BigDecimal(1), UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("teaspoon").get(), recipe2);
+        Ingredient ingredientJ = new Ingredient("black pepper", new BigDecimal(".25"), UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("teaspoon").get(), recipe2);
+        Ingredient ingredientK = new Ingredient("of dukkah, divided", new BigDecimal(5), UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("tablespoon").get(), recipe2);
+        Ingredient ingredientL = new Ingredient("Oil", new BigDecimal(".01"), UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("").get(), recipe2);
+        Ingredient ingredientM = new Ingredient("pomegranate seeds, for garnish (optional)", new BigDecimal(".25"), UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("cup").get(), recipe2);
+        Ingredient ingredientN = new Ingredient("small pita, for serving", new BigDecimal(6), UNIT_OF_MEASURE_SERVICE_IMPL.getUnitOfMeasureByDescription("round").get(), recipe2);
         Set<Ingredient> limeChickIngredientSet = new HashSet<>();
         limeChickIngredientSet.add(ingredientA);
         limeChickIngredientSet.add(ingredientB);

@@ -11,7 +11,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,8 +31,8 @@ class UnitOfMeasureServiceImplTest {
     @InjectMocks
     UnitOfMeasureServiceImpl unitOfMeasureServiceImpl;
 
-
-    Set<UnitOfMeasure> unitsOfMeasure;
+    Set<UnitOfMeasure> unitOfMeasureSet;
+    List<UnitOfMeasure> unitOfMeasureList = new ArrayList<>();
     UnitOfMeasure unitOfMeasure1;
     UnitOfMeasure unitOfMeasure2;
     Long uom1Id = 1L;
@@ -38,22 +40,24 @@ class UnitOfMeasureServiceImplTest {
 
     @BeforeEach
     void setup()  {
-        unitsOfMeasure = new HashSet<>(2);
+        unitOfMeasureSet = new HashSet<>(2);
         unitOfMeasure1 = new UnitOfMeasure();
         unitOfMeasure2 = new UnitOfMeasure();
         unitOfMeasure1.setId(uom1Id);
         unitOfMeasure2.setId(uom2Id);
-        unitsOfMeasure.add(unitOfMeasure1);
-        unitsOfMeasure.add(unitOfMeasure2);
-    }
+        unitOfMeasureSet.add(unitOfMeasure1);
+        unitOfMeasureSet.add(unitOfMeasure2);
 
+        unitOfMeasureList.add(unitOfMeasure1);
+        unitOfMeasureList.add(unitOfMeasure2);
+    }
 
     @Test
     void testListAllUOMs() {
         // This test was failing unitsOfMeasure == null for ages as I forgot to mock in necessary converter.
        //given unitsOfMeasure Setup and:
        when(unitOfMeasureRepository.findAll())
-               .thenReturn(unitsOfMeasure);
+               .thenReturn(unitOfMeasureSet);
 
       //when
         Set<UnitOfMeasureCommand> returnedCommandSet =  unitOfMeasureServiceImpl.listAllUoms();
@@ -61,7 +65,36 @@ class UnitOfMeasureServiceImplTest {
         assertNotNull(returnedCommandSet);
         verify(unitOfMeasureRepository, times(1)).findAll();
         assertEquals(1, returnedCommandSet.size());
+    }
 
 
+    @Test
+    void testGetAllUomsAsIterable() {
+        //given
+        Iterable<UnitOfMeasure> unitOfMeasureIterable = unitOfMeasureList;
+        when(unitOfMeasureRepository.findAll()).thenReturn(unitOfMeasureIterable);
+
+        //when
+        Iterable<UnitOfMeasure> returnedUomIterable = unitOfMeasureServiceImpl.getAllUomsAsIterable();
+        List<UnitOfMeasure> intoList = (List<UnitOfMeasure>) returnedUomIterable;
+
+        //then
+        verify(unitOfMeasureRepository, times(1)).findAll();
+        assertEquals(2, intoList.size());
+
+
+
+    }
+
+    @Test
+    void testGetOrCreateBlankDescriptionUnitOfMeasureCommand() {
+    }
+
+    @Test
+    void testGetUnitOfMeasureByDescription() {
+    }
+
+    @Test
+    void testSaveUnitOfMeasure() {
     }
 }

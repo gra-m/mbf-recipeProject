@@ -27,10 +27,9 @@ public class UnitOfMeasureServiceImpl implements UnitOfMeasureService {
         UOM_To_UOM_COMMAND = uom_to_uom_command;
     }
 
-    public Optional<UnitOfMeasure> findUnitOfMeasurementByDescription(String description){
-       return UOM_REPOSITORY.findUnitOfMeasureByDescription(description);
-    }
-    public Iterable<UnitOfMeasure> findAll() {
+
+    @Override
+    public Iterable<UnitOfMeasure> getAllUomsAsIterable() {
         return UOM_REPOSITORY.findAll();
     }
 
@@ -48,6 +47,7 @@ public class UnitOfMeasureServiceImpl implements UnitOfMeasureService {
      * @return UnitOfMeasureCommand
      */
     @Override
+    @Transactional
     public UnitOfMeasureCommand getOrCreateBlankDescriptionUnitOfMeasureCommand() {
         UnitOfMeasure savedBlankUom = new UnitOfMeasure();
 
@@ -62,8 +62,6 @@ public class UnitOfMeasureServiceImpl implements UnitOfMeasureService {
             return UOM_To_UOM_COMMAND.convert(savedBlankUom);
         }
     }
-
-
 
     @Override
     public Optional<UnitOfMeasure> getUnitOfMeasureByDescription(String description) {

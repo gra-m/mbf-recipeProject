@@ -15,4 +15,6 @@ public interface UnitOfMeasureService {
     UnitOfMeasureCommand getOrCreateBlankDescriptionUnitOfMeasureCommand();
     Optional<UnitOfMeasure> getUnitOfMeasureByDescription(String description);
     UnitOfMeasure saveUnitOfMeasure(UnitOfMeasure newUnitOfMeasure);
+    Iterable<UnitOfMeasure> getAllUomsAsIterable();
+
 }
