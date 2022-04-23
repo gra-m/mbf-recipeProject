@@ -11,10 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -35,6 +32,7 @@ class UnitOfMeasureServiceImplTest {
     List<UnitOfMeasure> unitOfMeasureList = new ArrayList<>();
     UnitOfMeasure unitOfMeasure1;
     UnitOfMeasure unitOfMeasure2;
+    UnitOfMeasureCommand unitOfMeasure2Command;
     Long uom1Id = 1L;
     Long uom2Id = 3L;
 
@@ -45,8 +43,13 @@ class UnitOfMeasureServiceImplTest {
         unitOfMeasure2 = new UnitOfMeasure();
         unitOfMeasure1.setId(uom1Id);
         unitOfMeasure2.setId(uom2Id);
+        unitOfMeasure2.setDescription("");
         unitOfMeasureSet.add(unitOfMeasure1);
         unitOfMeasureSet.add(unitOfMeasure2);
+
+        unitOfMeasure2Command = new UnitOfMeasureCommand();
+        unitOfMeasure2Command.setId(uom2Id);
+        unitOfMeasure2Command.setDescription("");
 
         unitOfMeasureList.add(unitOfMeasure1);
         unitOfMeasureList.add(unitOfMeasure2);
@@ -79,6 +82,7 @@ class UnitOfMeasureServiceImplTest {
         List<UnitOfMeasure> intoList = (List<UnitOfMeasure>) returnedUomIterable;
 
         //then
+        assertNotNull(intoList);
         verify(unitOfMeasureRepository, times(1)).findAll();
         assertEquals(2, intoList.size());
 
@@ -87,7 +91,20 @@ class UnitOfMeasureServiceImplTest {
     }
 
     @Test
-    void testGetOrCreateBlankDescriptionUnitOfMeasureCommand() {
+    void testGetOrCreateBlankDescriptionUnitOfMeasureCommand_BlankUomAlreadyExists() {
+        //given
+        Optional<UnitOfMeasure> blankAlreadyExistsinDb = Optional.of(unitOfMeasure1);
+        when(unitOfMeasureRepository.findUnitOfMeasureByDescription("")).thenReturn(blankAlreadyExistsinDb);
+        when(unitOfMeasureToUnitOfMeasureCommand.convert(any(UnitOfMeasure.class))).thenReturn(unitOfMeasure2Command);
+
+        //when
+        UnitOfMeasureCommand returnedFoundBlank = unitOfMeasureServiceImpl.getOrCreateBlankDescriptionUnitOfMeasureCommand();
+
+        //then
+        assertNotNull(returnedFoundBlank);
+        assertEquals(uom2Id, returnedFoundBlank.getId());
+        assertEquals("", returnedFoundBlank.getDescription());
+
     }
 
     @Test
