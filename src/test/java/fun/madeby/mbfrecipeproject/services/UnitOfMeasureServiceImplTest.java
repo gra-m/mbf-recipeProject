@@ -155,5 +155,17 @@ class UnitOfMeasureServiceImplTest {
 
     @Test
     void testSaveUnitOfMeasure() {
+        //given
+        when(unitOfMeasureRepository.save(any(UnitOfMeasure.class))).thenReturn(unitOfMeasure1);
+
+        //when
+
+        UnitOfMeasure savedUnitOfMeasure = unitOfMeasureServiceImpl.saveUnitOfMeasure(unitOfMeasure1);
+
+        //then
+        assertNotNull(savedUnitOfMeasure);
+        verify(unitOfMeasureRepository, times(1)).save(any(UnitOfMeasure.class));
+        assertEquals(uom1Id, savedUnitOfMeasure.getId());
+
     }
 }
