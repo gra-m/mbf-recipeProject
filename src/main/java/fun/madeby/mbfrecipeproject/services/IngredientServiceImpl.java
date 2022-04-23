@@ -47,7 +47,6 @@ public class IngredientServiceImpl implements IngredientService {
     public IngredientCommand getIngredientById(Long id) {
         Ingredient ingredient = new Ingredient();
 
-
         Optional<Ingredient> optionalIngredient = INGREDIENT_REPOSITORY.findById(id);
         if (optionalIngredient.isPresent()) {
             ingredient = optionalIngredient.get();
@@ -59,60 +58,45 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
+    public Ingredient saveIngredient(Ingredient ingredient) {
+        return INGREDIENT_REPOSITORY.save(ingredient);
+    }
+
+    @Override
     @Transactional
     public IngredientCommand saveOrUpdateIngredientCommand(IngredientCommand command) {
         Recipe recipe;
-        Ingredient updatingIngredient;
-        UnitOfMeasure uomExists;
+        Ingredient ingredientToUpdate;
         Ingredient saveUpdateSuccessful;
         Long newUpdatedIngredientID = command.getId();
-
         Recipe retrievedRecipeIsVoid = retrieveAndTestRecipe(command);
         if (retrievedRecipeIsVoid.getId() == null) {
             log.error("Ingredient command is detatched recipe " + command.getRecipe_id() + " cannot be found");
             return new IngredientCommand();
         } else
             recipe = retrievedRecipeIsVoid;
-
-
         Ingredient isNewSave = retrieveIngredient(recipe, command.getId());
-        if (isNewSave.getId() == null) {// todo create saveIngredient in Service
-            log.info("converting and adding commandIng to RECIPE");
+        if (isNewSave.getId() == null) {
+            log.info("convert and save New Ingredient");
             Ingredient commandConvertedToIngredient = INGREDIENT_COMMAND_TO_INGREDIENT.convert(command);
             assert commandConvertedToIngredient != null;
             Ingredient savedIngredient = saveIngredient(commandConvertedToIngredient);
             newUpdatedIngredientID = savedIngredient.getId();
             recipe.addIngredient(savedIngredient);
-
         } else {
-            updatingIngredient = isNewSave;
-                updatingIngredient.setDescription(command.getDescription());
-                updatingIngredient.setAmount(command.getAmount());
-                UnitOfMeasure uomNotInDb = retrieveAndTestUnitOfMeasure(command.getUom().getId());
-                if (uomNotInDb.getId() == null)
-                    throw new RuntimeException("UOM NOT FOUND");
-                else
-                    uomExists = uomNotInDb;
-                    updatingIngredient.setUom(uomExists);
-            }
-
-            Recipe savedRecipe = RECIPE_REPOSITORY.save(recipe);
-            Ingredient retrievalFailed = retrieveIngredient(savedRecipe, newUpdatedIngredientID);
-
+            ingredientToUpdate = isNewSave;
+            updateIngredient(ingredientToUpdate, command);
+        }
+        Recipe savedRecipe = RECIPE_REPOSITORY.save(recipe);
+        Ingredient retrievalFailed = retrieveIngredient(savedRecipe, newUpdatedIngredientID);
         if (retrievalFailed.getId() == null)
             throw new RuntimeException("ERROR @ SAVE - IngredientCommand could not be retrieved from saved Recipe");
         else
             saveUpdateSuccessful = retrievalFailed;
-            return INGREDIENT_TO_INGREDIENT_COMMAND.convert(saveUpdateSuccessful);
-    }
-
-    @Override
-    public Ingredient saveIngredient(Ingredient ingredient) {
-        return INGREDIENT_REPOSITORY.save(ingredient);
+        return INGREDIENT_TO_INGREDIENT_COMMAND.convert(saveUpdateSuccessful);
     }
 
     // region HELPER METHODS
-
     Ingredient retrieveIngredient(Recipe savedRecipe, Long ingredientId) {
         Ingredient retrievalFailed = new Ingredient();
         retrievalFailed.setId(null);
@@ -123,6 +107,18 @@ public class IngredientServiceImpl implements IngredientService {
                 .findFirst();
 
         return ingredientRetrieved.orElse(retrievalFailed);
+    }
+
+    private void updateIngredient(Ingredient updatingIngredient, IngredientCommand command) {
+        UnitOfMeasure uomExists;
+        updatingIngredient.setDescription(command.getDescription());
+        updatingIngredient.setAmount(command.getAmount());
+        UnitOfMeasure uomNotInDb = retrieveAndTestUnitOfMeasure(command.getUom().getId());
+        if (uomNotInDb.getId() == null)
+            throw new RuntimeException("UOM NOT FOUND");
+        else
+            uomExists = uomNotInDb;
+        updatingIngredient.setUom(uomExists);
     }
 
     private UnitOfMeasure retrieveAndTestUnitOfMeasure(Long uomId) {

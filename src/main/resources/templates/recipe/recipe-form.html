@@ -106,10 +106,10 @@
                                 <div class="btn-group col-md-8 m-md-auto" role="group">
 
                                     <div class="row col-md-12">
-                                    <button class="btn-sm btn-secondary col-md-6" href="#"
-                                       th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}" role="button">Edit</button>
-                                    <button class="btn-sm btn-secondary col-md-6" href="#"
-                                       th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/new'}" role="button">New</button>
+                                    <a class="btn-sm btn-secondary col-md-4 m-auto" type="button" href="#" style="text-decoration:none; text-align:center;"
+                                       th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}">Edit</a>
+                                    <a class="btn-sm btn-secondary col-md-4 m-auto" type="button" href="#" style="text-decoration:none; text-align:center;"
+                                       th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/new'}">New</a>
                                         </div>
 
 
