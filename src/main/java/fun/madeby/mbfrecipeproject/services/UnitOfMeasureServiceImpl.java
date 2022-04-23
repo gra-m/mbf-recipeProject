@@ -56,9 +56,9 @@ public class UnitOfMeasureServiceImpl implements UnitOfMeasureService {
         if(blankAlreadyExistsInDb.isPresent())
             return UOM_To_UOM_COMMAND.convert(blankAlreadyExistsInDb.get());
         else {
-            UnitOfMeasure newIngredientFormNeedsBlankUOM = new UnitOfMeasure();
-            newIngredientFormNeedsBlankUOM.setDescription("");
-            savedBlankUom = saveUnitOfMeasure(newIngredientFormNeedsBlankUOM);
+            UnitOfMeasure createdBlankUom = new UnitOfMeasure();
+            createdBlankUom.setDescription("");
+            savedBlankUom = saveUnitOfMeasure(createdBlankUom);
             return UOM_To_UOM_COMMAND.convert(savedBlankUom);
         }
     }

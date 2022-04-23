@@ -90,6 +90,8 @@ class UnitOfMeasureServiceImplTest {
 
     }
 
+    //region BlankUom Creation ExistsAlready/noBlankUom
+
     @Test
     void testGetOrCreateBlankDescriptionUnitOfMeasureCommand_BlankUomAlreadyExists() {
         //given
@@ -106,6 +108,29 @@ class UnitOfMeasureServiceImplTest {
         assertEquals("", returnedFoundBlank.getDescription());
 
     }
+
+    @Test
+    void testGetOrCreateBlankDescriptionUnitOfMeasureCommand_NoBlankUom() {
+        //given
+        Optional<UnitOfMeasure> blankDoesNotExist = Optional.empty();
+        when(unitOfMeasureRepository.findUnitOfMeasureByDescription("")).thenReturn(blankDoesNotExist);
+        when(unitOfMeasureRepository.save(any(UnitOfMeasure.class))).thenReturn(unitOfMeasure2);
+        when(unitOfMeasureToUnitOfMeasureCommand.convert(any(UnitOfMeasure.class))).thenReturn(unitOfMeasure2Command);
+
+        //when
+        UnitOfMeasureCommand returnedFoundBlank = unitOfMeasureServiceImpl.getOrCreateBlankDescriptionUnitOfMeasureCommand();
+
+        //then
+        assertNotNull(returnedFoundBlank);
+        assertEquals(uom2Id, returnedFoundBlank.getId());
+        assertEquals("", returnedFoundBlank.getDescription());
+        verify(unitOfMeasureRepository, times(1)).findUnitOfMeasureByDescription(anyString());
+        verify(unitOfMeasureRepository, times(1)).save(any(UnitOfMeasure.class));
+    }
+
+
+
+    //endregion
 
     @Test
     void testGetUnitOfMeasureByDescription() {
