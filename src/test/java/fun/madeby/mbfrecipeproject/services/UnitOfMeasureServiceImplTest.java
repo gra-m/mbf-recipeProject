@@ -42,6 +42,7 @@ class UnitOfMeasureServiceImplTest {
         unitOfMeasure1 = new UnitOfMeasure();
         unitOfMeasure2 = new UnitOfMeasure();
         unitOfMeasure1.setId(uom1Id);
+        unitOfMeasure1.setDescription("This is description");
         unitOfMeasure2.setId(uom2Id);
         unitOfMeasure2.setDescription("");
         unitOfMeasureSet.add(unitOfMeasure1);
@@ -134,6 +135,22 @@ class UnitOfMeasureServiceImplTest {
 
     @Test
     void testGetUnitOfMeasureByDescription() {
+        //given
+        UnitOfMeasure returnedUom = null;
+        Optional<UnitOfMeasure> foundAndReturnedByDescription = Optional.of(unitOfMeasure1);
+        when(unitOfMeasureRepository.findUnitOfMeasureByDescription("This is description")).thenReturn(foundAndReturnedByDescription);
+
+        //when
+
+        Optional<UnitOfMeasure> optionalReturned = unitOfMeasureServiceImpl.getUnitOfMeasureByDescription("This is description");
+        if(optionalReturned.isPresent())
+            returnedUom = optionalReturned.get();
+
+        //then
+
+        assertNotNull(returnedUom);
+        assertEquals("This is description", returnedUom.getDescription());
+        verify(unitOfMeasureRepository, times(1)).findUnitOfMeasureByDescription(anyString());
     }
 
     @Test
