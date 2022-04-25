@@ -24,7 +24,7 @@
 <div class="container-fluid" style="margin-top: 20px">
     <form action="http://localhost"
           method="post" enctype="multipart/form-data"
-          th:action="@{'/recipe' + ${recipe.getId()} + '/image'}">
+          th:action="@{'/recipe/' + ${recipe.getId()} + '/image'}">
 <div class="col-md-8 m-md-auto">
         <section class="row card-group col-sm-12">
             <div class="card">
@@ -33,7 +33,7 @@
 
                 <div class="row">
                 <div class="col-sm-12 form-group">
-                    <input id="imagefile" type="file" class="file"/>
+                    <input  name="imagefile"  type="file"/>
                 </div>
 
                 <div class="col-sm-12 form-group">
