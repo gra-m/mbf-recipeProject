@@ -250,4 +250,13 @@ class IngredientServiceImplTest {
 
     }
 
+    @Test
+    void testdeleteIngredientById() {
+        //given ingredient id exists
+        //when
+        ingredientServiceImpl.deleteIngredientById(ing1_Id);
+
+        //then
+        verify(ingredientRepository, times(1)).deleteById(anyLong());
+    }
 }

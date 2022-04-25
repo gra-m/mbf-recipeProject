@@ -63,6 +63,11 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
+    public void deleteIngredientById(Long id) {
+        INGREDIENT_REPOSITORY.deleteById(id);
+    }
+
+    @Override
     @Transactional
     public IngredientCommand saveOrUpdateIngredientCommand(IngredientCommand command) {
         Recipe recipe;
