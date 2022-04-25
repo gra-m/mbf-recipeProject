@@ -19,32 +19,28 @@ public class RecipeController {
         RECIPE_SERVICE = recipe_service;
     }
 
-    @GetMapping
-    @RequestMapping("/recipe/{id}/show")
+    @GetMapping("/recipe/{id}/show")
     public String getRecipeById(@PathVariable String id, Model model) {
         log.debug("RC_GET_/recipe/{id}/show");
         model.addAttribute("recipe", RECIPE_SERVICE.getRecipeById(Long.valueOf(id)));
         return "recipe/show";
     }
 
-    @GetMapping
-    @RequestMapping("/recipe/new")
+    @GetMapping("/recipe/new")
     public String newRecipeForm(Model model) {
         log.debug("RC_GET_/recipe/new");
         model.addAttribute("recipe", new RecipeCommand());
         return "recipe/recipe-form";
     }
 
-    @GetMapping
-    @RequestMapping("/recipe/{id}/update")
+    @GetMapping("/recipe/{id}/update")
     public String getUpdateView(@PathVariable String id, Model model) {
         log.debug("RC_GET_/recipe/{id}/update");
         model.addAttribute("recipe", RECIPE_SERVICE.getRecipeCommandById(Long.valueOf(id)));
         return "recipe/recipe-form";
     }
 
-    @GetMapping
-    @RequestMapping("recipe/{id}/delete")
+    @GetMapping("recipe/{id}/delete")
     public String deleteRecipe(@PathVariable String id) {
         log.debug("RC_GET_/recipe/{id}/delete");
 
@@ -52,8 +48,7 @@ public class RecipeController {
         return "redirect:/";
     }
 
-    @PostMapping
-    @RequestMapping("/recipe")
+    @PostMapping("/recipe")
     public String saveOrUpdateRecipe(@ModelAttribute RecipeCommand command) {
         log.debug("RC_POST_/recipe");
 
