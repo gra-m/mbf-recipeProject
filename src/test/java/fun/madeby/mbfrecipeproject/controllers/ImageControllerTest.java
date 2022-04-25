@@ -2,6 +2,7 @@ package fun.madeby.mbfrecipeproject.controllers;
 
 import fun.madeby.mbfrecipeproject.commands.RecipeCommand;
 import fun.madeby.mbfrecipeproject.domain.Recipe;
+import fun.madeby.mbfrecipeproject.services.ImageService;
 import fun.madeby.mbfrecipeproject.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,13 +10,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 
 @ExtendWith(MockitoExtension.class)
 class ImageControllerTest {
@@ -25,6 +28,9 @@ class ImageControllerTest {
 
     @Mock
     RecipeService recipeService;
+
+    @Mock
+    ImageService imageService;
 
     MockMvc mockMvc;
     Recipe recipe1;
@@ -57,6 +63,22 @@ class ImageControllerTest {
     }
 
     @Test
-    void testHandleImageUploadOrUpdate() {
+    void testHandleImageUploadOrUpdate() throws Exception {
+        //given
+        MockMultipartFile multipartFile =
+                new MockMultipartFile("imagefile",
+                "testing.txt", "text/plain", "Made By Funk".getBytes());
+
+        //when
+
+
+        //then
+
+        mockMvc.perform(multipart("/recipe/1/image").file(multipartFile))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(header().string("Location", "/recipe/1/image"));
+        verify(imageService, times(1)).saveImage(any(), anyLong());
+
+
     }
 }

@@ -1,5 +1,6 @@
 package fun.madeby.mbfrecipeproject.controllers;
 
+import fun.madeby.mbfrecipeproject.services.ImageService;
 import fun.madeby.mbfrecipeproject.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -7,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Created by Gra_m on 2022 04 25
@@ -15,9 +18,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class ImageController {
     private final RecipeService RECIPE_SERVICE;
+    private final ImageService IMAGE_SERVICE;
 
-    public ImageController(RecipeService recipe_service) {
+    public ImageController(RecipeService recipe_service, ImageService imageService) {
         RECIPE_SERVICE = recipe_service;
+        IMAGE_SERVICE = imageService;
     }
 
 
@@ -30,9 +35,14 @@ public class ImageController {
     }
 
 
-    @PostMapping("recipe/{id}/image")
-    public String handleImageUploadOrUpdate() {
+    @PostMapping("/recipe/{id}/image")
+    public String handleImageUploadOrUpdate(@PathVariable String id,
+                                            @RequestParam("imagefile") MultipartFile imageFile) {
         log.debug("/recipe/{id}/image -->POST");
-        return "hello";
+
+        IMAGE_SERVICE.saveImage(imageFile, Long.valueOf(id));
+
+
+        return "redirect:/recipe/" + id + "/image";
     }
 }
