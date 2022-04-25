@@ -33,7 +33,8 @@ public class IngredientController {
                                                                 @PathVariable String id){
         log.debug("IC_GET_/recipe/{recipe_id}ingredient/{id}/delete");
 
-        //INGREDIENT_SERVICE.deleteIngredienById(Long.valueOf(id));
+        INGREDIENT_SERVICE.deleteIngredientById(Long.valueOf(id));
+
         return "redirect:/recipe/" + recipe_id + "/ingredients";
     }
 
