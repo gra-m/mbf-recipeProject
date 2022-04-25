@@ -69,9 +69,6 @@ class ImageControllerTest {
                 new MockMultipartFile("imagefile",
                 "testing.txt", "text/plain", "Made By Funk".getBytes());
 
-        //when
-
-
         //then
 
         mockMvc.perform(multipart("/recipe/1/image").file(multipartFile))

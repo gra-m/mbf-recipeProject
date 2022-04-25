@@ -12,6 +12,6 @@ import java.util.Set;
 public interface ImageService {
     Set<MultipartFile> getImages();
     MultipartFile getImageById(Long aLong);
-    MultipartFile saveImage(MultipartFile image, Long id);
+    void saveImage(MultipartFile image, Long id);
     void deleteImageById(Long id);
 }
