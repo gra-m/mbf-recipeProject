@@ -8,7 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 
@@ -25,11 +24,11 @@ class ImageServiceImplTest {
     @Mock
     RecipeRepository recipeRepository;
 
-    @InjectMocks
-    ImageService imageService = new ImageServiceImpl(recipeRepository);
-
     /*@InjectMocks
-    ImageServiceImpl imageService;*/
+    ImageService imageService = new ImageServiceImpl(recipeRepository);*/
+
+    @InjectMocks
+    ImageServiceImpl imageServiceImpl;
 
     Recipe recipe1;
     Long recipe1_id = 1L;
@@ -61,7 +60,7 @@ class ImageServiceImplTest {
         ArgumentCaptor<Recipe> argumentCaptor = ArgumentCaptor.forClass(Recipe.class);
 
         //when
-        imageService.saveImage(multipartFile, recipe1_id);
+        imageServiceImpl.saveImage(multipartFile, recipe1_id);
 
         //then
         verify(recipeRepository, times(1)).save(argumentCaptor.capture());
