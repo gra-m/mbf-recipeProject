@@ -28,6 +28,14 @@ public class IngredientController {
         UOM_SERVICE = uomService;
     }
 
+    @GetMapping("/recipe/{recipe_id}/ingredient/{id}/delete")
+        public String deleteIngredientFromRecipesIngredientList(@PathVariable String recipe_id,
+                                                                @PathVariable String id){
+        log.debug("IC_GET_/recipe/{recipe_id}ingredient/{id}/delete");
+
+        //INGREDIENT_SERVICE.deleteIngredienById(Long.valueOf(id));
+        return "redirect:/recipe/" + recipe_id + "/ingredients";
+    }
 
     @GetMapping("/recipe/{id}/ingredients")
     public String listRecipeIngredients(@PathVariable String id, Model model) {
