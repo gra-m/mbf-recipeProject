@@ -74,7 +74,7 @@
                                     <!--th T Type property with path to the ENUM-->
                                     <option th:each="diffVal : ${T(fun.madeby.mbfrecipeproject.domain.Difficulty).values()}"
                                             th:value="${diffVal.name()}"
-                                            th:text="${diffVal.name()}"
+                                            th:text="${diffVal.label}"
                                     >val</option>
                                 </select>
                                     <select class="form-control" th:remove="all">

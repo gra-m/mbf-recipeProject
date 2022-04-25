@@ -5,5 +5,15 @@ package fun.madeby.mbfrecipeproject.domain;
  */
 
 public enum Difficulty {
-EASY, MODERATE, HARD
+    EASY("Easy"),
+    MODERATE("Moderate"),
+    HARD("Hard");
+
+
+    public final String label;
+
+    Difficulty(String label) {
+        this.label = label;
+    }
+
 }
