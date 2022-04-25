@@ -69,7 +69,15 @@
                         <div class="row">
                             <div class="col-sm-6 form-group">
                                 <label>Difficulty:</label>
-                                <select class="form-control">
+                                <!--Define th field-->
+                                <select class="form-control" th:field="*{difficulty}">
+                                    <!--th T Type property with path to the ENUM-->
+                                    <option th:each="diffVal : ${T(fun.madeby.mbfrecipeproject.domain.Difficulty).values()}"
+                                            th:value="${diffVal.name()}"
+                                            th:text="${diffVal.name()}"
+                                    >val</option>
+                                </select>
+                                    <select class="form-control" th:remove="all">
                                     <option>Easy</option>
                                     <option>Medium</option>
                                     <option>Hard</option>
