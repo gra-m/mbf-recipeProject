@@ -10,15 +10,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 class ImageControllerTest {
@@ -55,8 +59,8 @@ class ImageControllerTest {
         //when
         when(recipeService.getRecipeCommandById(recipe1_id)).thenReturn(recipe1Command);
         //then
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/image"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+        this.mockMvc.perform(get("/recipe/1/image"))
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("recipe/image-upload-form"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("recipe"));
         verify(recipeService, times(1)).getRecipeCommandById(anyLong());
@@ -72,9 +76,37 @@ class ImageControllerTest {
         //then
 
         mockMvc.perform(multipart("/recipe/1/image").file(multipartFile))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(status().is3xxRedirection())
                 .andExpect(header().string("Location", "/recipe/1/image"));
         verify(imageService, times(1)).saveImage(any(), anyLong());
+
+
+    }
+
+    @Test
+    public void testRenderImageFromDb() throws Exception {
+        int i = 0;
+        //given
+
+        String fakeImageText = "fakeImageText";
+
+        Byte[] bytesBoxedfakeImage = new Byte[fakeImageText.getBytes().length];
+
+        for(byte primByte : fakeImageText.getBytes())
+            bytesBoxedfakeImage[i++] = primByte;
+
+        recipe1Command.setImage(bytesBoxedfakeImage);
+
+        when(recipeService.getRecipeCommandById(anyLong())).thenReturn(recipe1Command);
+
+        //when
+        MockHttpServletResponse response = mockMvc.perform(get("/recipe/" + recipe1_id + "/recipeimage"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse();
+
+        byte[] responseBytes = response.getContentAsByteArray();
+        assertEquals(bytesBoxedfakeImage.length, responseBytes.length);
+
 
 
     }

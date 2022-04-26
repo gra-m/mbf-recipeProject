@@ -1,8 +1,10 @@
 package fun.madeby.mbfrecipeproject.controllers;
 
+import fun.madeby.mbfrecipeproject.commands.RecipeCommand;
 import fun.madeby.mbfrecipeproject.services.ImageService;
 import fun.madeby.mbfrecipeproject.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +12,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by Gra_m on 2022 04 25
@@ -45,4 +52,34 @@ public class ImageController {
 
         return "redirect:/recipe/" + id + "/image";
     }
+
+
+    @GetMapping("recipe/{id}/recipeimage")
+    public void renderImageFromDb(@PathVariable String id, HttpServletResponse response) {
+        int i = 0;
+        log.debug("/recipe/{id}/recipeimage");
+
+        try {
+            RecipeCommand recipeCommand = RECIPE_SERVICE.getRecipeCommandById(Long.valueOf(id));
+
+            byte[] byteArray = new byte[recipeCommand.getImage().length];
+
+            for(Byte wrappedByte: recipeCommand.getImage())
+                byteArray[i++] = wrappedByte;
+
+            response.setContentType("image/jpeg");
+            InputStream inputStream = new ByteArrayInputStream(byteArray);
+            IOUtils.copy(inputStream, response.getOutputStream());
+        } catch (IOException e) {
+            log.error("Error copying inputstream to outputstream");
+
+            e.printStackTrace();
+        } catch(Exception e) {
+            log.error("Error with recipeCommand/Byteconversion");
+
+            e.printStackTrace();
+        }
+    }
+
+
 }
