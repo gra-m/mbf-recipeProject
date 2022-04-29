@@ -2,9 +2,11 @@ package fun.madeby.mbfrecipeproject.controllers;
 
 import fun.madeby.mbfrecipeproject.commands.RecipeCommand;
 import fun.madeby.mbfrecipeproject.domain.Recipe;
+import fun.madeby.mbfrecipeproject.exceptions.NotFoundException;
 import fun.madeby.mbfrecipeproject.services.RecipeService;
 import org.hamcrest.core.IsSame;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,6 +22,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
 class RecipeControllerTest {
@@ -53,9 +56,18 @@ class RecipeControllerTest {
         when(recipeService.getRecipeById(anyLong()))
                 .thenReturn(recipe1);
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/show"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("recipe/show"))
                 .andExpect(MockMvcResultMatchers.model().attribute("recipe", new IsSame(recipe1)));
+    }
+
+    @Test
+    @DisplayName("RecipeNotFound returns NOT_FOUND")
+    public void testGetRecipeNotFound() throws Exception {
+        when(recipeService.getRecipeById(anyLong())).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/show"))
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -63,7 +75,7 @@ class RecipeControllerTest {
         //given /recipe/new has been requested by user (MockMvcRequestBuilders)
 
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/new"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("recipe/recipe-form"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("recipe"));
     }
@@ -81,7 +93,7 @@ class RecipeControllerTest {
                 .param("id", "")
                 .param("description", "some string"))
         //then
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.view().name("redirect:/recipe/4/show"));
     }
 
@@ -95,7 +107,7 @@ class RecipeControllerTest {
                 .thenReturn(recipeCommand);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/6/update"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("recipe/recipe-form"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("recipe"));
     }
@@ -104,7 +116,7 @@ class RecipeControllerTest {
     @Test
     public void testDeleteAction() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/2/delete"))
-                .andExpect(MockMvcResultMatchers.status().is3xxRedirection())
+                .andExpect(status().is3xxRedirection())
                 .andExpect(MockMvcResultMatchers.view().name("redirect:/"));
 
         // deleteById is part of Spring Data JPA so decided to test service that calls it
