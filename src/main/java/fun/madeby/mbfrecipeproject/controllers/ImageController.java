@@ -70,6 +70,10 @@ public class ImageController {
             response.setContentType("image/jpeg");
             InputStream inputStream = new ByteArrayInputStream(byteArray);
             IOUtils.copy(inputStream, response.getOutputStream());
+        } catch(NullPointerException e){
+            log.error("Known issue when db initialised without images");
+
+            e.printStackTrace();
         } catch (IOException e) {
             log.error("Error copying inputstream to outputstream");
 

@@ -1,11 +1,14 @@
 package fun.madeby.mbfrecipeproject.controllers;
 
 import fun.madeby.mbfrecipeproject.commands.RecipeCommand;
+import fun.madeby.mbfrecipeproject.exceptions.NotFoundException;
 import fun.madeby.mbfrecipeproject.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * Created by Gra_m on 2022 04 16
@@ -13,7 +16,9 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @Controller
 public class RecipeController {
+    private static final String NOT_FOUND_404 = "404error";
     private final RecipeService RECIPE_SERVICE;
+
 
     public RecipeController(RecipeService recipe_service) {
         RECIPE_SERVICE = recipe_service;
@@ -54,5 +59,13 @@ public class RecipeController {
 
         RecipeCommand savedRecipeCommand = RECIPE_SERVICE.saveRecipeCommand(command);
         return "redirect:/recipe/" + savedRecipeCommand.getId() + "/show";
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)// without this == 200
+    @ExceptionHandler(NotFoundException.class)
+    public String notFoundError(){
+
+        // he returns Model and view, setting view name to that below
+        return NOT_FOUND_404;
     }
 }

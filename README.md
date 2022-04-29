@@ -14,8 +14,8 @@ On: 28/03/2022
 ### What was new for me?
 *see petclinic for earlier examples of techniques not used before*
 * Exception Handling:
-  * @ResponseStatus custom exception -> which HTTP status is thrown globally
-  * @ExceptionHandler -> @Controller level
+  * @ResponseStatus custom exception -> which HTTP status is thrown globally #78
+  * @ExceptionHandler -> @Controller level #79
 
 
 ### Project resources used or useful
@@ -39,8 +39,8 @@ Table of Contents:
 
 <a id="1"></a>
 Exception Handling:
-* @ResponseStatus custom exception -> which HTTP status is thrown globally
-* @ExceptionHandler -> @Controller level
+* @ResponseStatus custom exception -> which HTTP status is thrown globally #78
+* @ExceptionHandler -> @Controller level #79
 * Interface: HandlerExceptionResolver
   * ExceptionHandlerExceptionResolver -> matches uncaught exceptions to @ExceptionHandler
   * ResponseStatusExceptionResolver -> looks for uncaught exceptions matching @ResponseStatus

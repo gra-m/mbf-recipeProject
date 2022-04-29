@@ -23,9 +23,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @ExtendWith(MockitoExtension.class)
 class RecipeControllerTest {
+    private static final String NOT_FOUND_404 = "404error";
 
     @InjectMocks
     RecipeController controllerUnderTest;
@@ -57,17 +59,18 @@ class RecipeControllerTest {
                 .thenReturn(recipe1);
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/show"))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.view().name("recipe/show"))
+                .andExpect(view().name("recipe/show"))
                 .andExpect(MockMvcResultMatchers.model().attribute("recipe", new IsSame(recipe1)));
     }
 
     @Test
-    @DisplayName("RecipeNotFound returns NOT_FOUND")
+    @DisplayName("RecipeNotFound returns 404 NOT_FOUND")
     public void testGetRecipeNotFound() throws Exception {
         when(recipeService.getRecipeById(anyLong())).thenThrow(NotFoundException.class);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/show"))
-                .andExpect(status().isNotFound());
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/-1/show"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name(NOT_FOUND_404));
     }
 
     @Test
@@ -76,7 +79,7 @@ class RecipeControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/new"))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.view().name("recipe/recipe-form"))
+                .andExpect(view().name("recipe/recipe-form"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("recipe"));
     }
 
@@ -94,7 +97,7 @@ class RecipeControllerTest {
                 .param("description", "some string"))
         //then
                 .andExpect(status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.view().name("redirect:/recipe/4/show"));
+                .andExpect(view().name("redirect:/recipe/4/show"));
     }
 
     @Test
@@ -108,7 +111,7 @@ class RecipeControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/6/update"))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.view().name("recipe/recipe-form"))
+                .andExpect(view().name("recipe/recipe-form"))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("recipe"));
     }
 
@@ -117,7 +120,7 @@ class RecipeControllerTest {
     public void testDeleteAction() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/2/delete"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(MockMvcResultMatchers.view().name("redirect:/"));
+                .andExpect(view().name("redirect:/"));
 
         // deleteById is part of Spring Data JPA so decided to test service that calls it
         Mockito.verify(recipeService, Mockito.times(1)).deleteRecipeById(anyLong());
