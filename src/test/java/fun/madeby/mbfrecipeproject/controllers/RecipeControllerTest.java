@@ -22,8 +22,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
 class RecipeControllerTest {
@@ -60,7 +59,7 @@ class RecipeControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/1/show"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/show"))
-                .andExpect(MockMvcResultMatchers.model().attribute("recipe", new IsSame(recipe1)));
+                .andExpect(model().attribute("recipe", new IsSame(recipe1)));
     }
 
     @Test
@@ -70,7 +69,8 @@ class RecipeControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/-1/show"))
                 .andExpect(status().isNotFound())
-                .andExpect(view().name(NOT_FOUND_404));
+                .andExpect(view().name(NOT_FOUND_404))
+                .andExpect(model().attributeExists("exception"));
     }
 
     @Test
@@ -80,7 +80,7 @@ class RecipeControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/recipe-form"))
-                .andExpect(MockMvcResultMatchers.model().attributeExists("recipe"));
+                .andExpect(model().attributeExists("recipe"));
     }
 
     @Test
@@ -112,7 +112,7 @@ class RecipeControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/6/update"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/recipe-form"))
-                .andExpect(MockMvcResultMatchers.model().attributeExists("recipe"));
+                .andExpect(model().attributeExists("recipe"));
     }
 
 
