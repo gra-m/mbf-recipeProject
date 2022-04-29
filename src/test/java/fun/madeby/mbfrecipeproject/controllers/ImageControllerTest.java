@@ -5,6 +5,7 @@ import fun.madeby.mbfrecipeproject.domain.Recipe;
 import fun.madeby.mbfrecipeproject.services.ImageService;
 import fun.madeby.mbfrecipeproject.services.RecipeService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,11 +22,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 
 @ExtendWith(MockitoExtension.class)
 class ImageControllerTest {
+    private static final String NUMBER_FORMAT_CAUSING_STRING = "asdfl;j";
+    private static final String BAD_REQUEST_400 = "400error";
 
     @InjectMocks
     ImageController controllerUnderTest;
@@ -45,13 +48,28 @@ class ImageControllerTest {
 
     @BeforeEach
     void setUp() {
-        this.mockMvc = MockMvcBuilders.standaloneSetup(new Object[]{this.controllerUnderTest}).build();
+        this.mockMvc = MockMvcBuilders.standaloneSetup(controllerUnderTest)
+                .setControllerAdvice(new ControllerExceptionHandler())
+                .build();
         this.recipe1 = new Recipe();
         this.recipe1.setId(this.recipe1_id);
         this.recipe1Command = new RecipeCommand();
         this.recipe1Command.setId(recipe1_id);
 
     }
+
+    @Test
+    @DisplayName("Bad Request returns 400 BAD_REQUEST")
+    public void testGetImageNumberFormatException() throws Exception {
+
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/" + NUMBER_FORMAT_CAUSING_STRING + "/image"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name(BAD_REQUEST_400))
+                .andExpect(model().attributeExists("exception"));
+    }
+
+
 
     @Test
     void testServeImageUpdateForm() throws Exception {

@@ -47,7 +47,19 @@ class RecipeControllerTest {
 
         mockMvc = MockMvcBuilders
                 .standaloneSetup(controllerUnderTest)
+                .setControllerAdvice(new ControllerExceptionHandler())
                 .build();
+    }
+
+    @Test
+    @DisplayName("Bad Request returns 400 BAD_REQUEST")
+    public void testGetRecipeNumberFormatException() throws Exception {
+
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/" + NUMBER_FORMAT_CAUSING_STRING + "/show"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name(BAD_REQUEST_400))
+                .andExpect(model().attributeExists("exception"));
     }
 
     @Test
@@ -74,16 +86,6 @@ class RecipeControllerTest {
                 .andExpect(model().attributeExists("exception"));
     }
 
-    @Test
-    @DisplayName("Bad Request returns 400 BAD_REQUEST")
-    public void testGetRecipeBadRequest() throws Exception {
-
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/" + NUMBER_FORMAT_CAUSING_STRING + "/show"))
-                .andExpect(status().isBadRequest())
-                .andExpect(view().name(BAD_REQUEST_400))
-                .andExpect(model().attributeExists("exception"));
-    }
 
     @Test
     void testGetNewRecipeForm() throws Exception {

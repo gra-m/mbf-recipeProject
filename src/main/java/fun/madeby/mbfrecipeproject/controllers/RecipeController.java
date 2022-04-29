@@ -17,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class RecipeController {
     private static final String NOT_FOUND_404 = "404error";
-    private static final String BAD_REQUEST_400 = "400error";
     private final RecipeService RECIPE_SERVICE;
 
 
@@ -62,9 +61,13 @@ public class RecipeController {
         return "redirect:/recipe/" + savedRecipeCommand.getId() + "/show";
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)// without this == 200
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundException.class)
     public ModelAndView notFoundError(Exception e){
+
+        log.error("Handling not found exception");
+        log.error(e.getMessage());
+
 
         ModelAndView notFoundViewAndExceptionModel = new ModelAndView();
         notFoundViewAndExceptionModel.setViewName(NOT_FOUND_404);
@@ -73,14 +76,5 @@ public class RecipeController {
         return notFoundViewAndExceptionModel;
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(NumberFormatException.class)
-    public ModelAndView badRequestError(Exception e){
 
-        ModelAndView badRequestViewAndExceptionModel = new ModelAndView();
-        badRequestViewAndExceptionModel.setViewName(BAD_REQUEST_400);
-        badRequestViewAndExceptionModel.addObject("exception", e);
-
-        return badRequestViewAndExceptionModel;
-    }
 }
