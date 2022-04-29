@@ -1,8 +1,10 @@
 package fun.madeby.mbfrecipeproject.services;
 
 import fun.madeby.mbfrecipeproject.domain.Recipe;
+import fun.madeby.mbfrecipeproject.exceptions.NotFoundException;
 import fun.madeby.mbfrecipeproject.repositories.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -27,7 +29,7 @@ class RecipeServiceImplTest {
     RecipeServiceImpl recipeServiceImpl;
     Recipe recipe1;
     Recipe recipe2;
-
+    Long callAgainstNonRunningDb = 1L;
 
     @BeforeEach
     void setUp() {
@@ -51,6 +53,17 @@ class RecipeServiceImplTest {
         verify(recipeRepository, times(1))
                 .findById(anyLong());
         verify(recipeRepository, never()).findAll();
+    }
+
+    @Test
+    @DisplayName("NotFoundException: getRecipeById(noDbRunning == always returns Empty Optional);")
+    void testGetRecipeById_NotFound() {
+
+        assertThrows(NotFoundException.class, () -> {
+            recipeServiceImpl.getRecipeById(callAgainstNonRunningDb);
+        });
+
+        verify(recipeRepository, times(1)).findById(callAgainstNonRunningDb);
     }
 
 
@@ -83,6 +96,7 @@ class RecipeServiceImplTest {
         //then
         verify(recipeRepository, times(1)).deleteById(anyLong());
     }
+
 
 
 
