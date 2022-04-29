@@ -16,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -26,7 +25,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 class RecipeControllerTest {
+    private static final String BAD_REQUEST_400 = "400error";
     private static final String NOT_FOUND_404 = "404error";
+    private static final String NUMBER_FORMAT_CAUSING_STRING = "asdfl;j";
 
     @InjectMocks
     RecipeController controllerUnderTest;
@@ -70,6 +71,17 @@ class RecipeControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/recipe/-1/show"))
                 .andExpect(status().isNotFound())
                 .andExpect(view().name(NOT_FOUND_404))
+                .andExpect(model().attributeExists("exception"));
+    }
+
+    @Test
+    @DisplayName("Bad Request returns 400 BAD_REQUEST")
+    public void testGetRecipeBadRequest() throws Exception {
+
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/recipe/" + NUMBER_FORMAT_CAUSING_STRING + "/show"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name(BAD_REQUEST_400))
                 .andExpect(model().attributeExists("exception"));
     }
 

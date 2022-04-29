@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class RecipeController {
     private static final String NOT_FOUND_404 = "404error";
+    private static final String BAD_REQUEST_400 = "400error";
     private final RecipeService RECIPE_SERVICE;
 
 
@@ -70,5 +71,16 @@ public class RecipeController {
         notFoundViewAndExceptionModel.addObject("exception", e);
 
         return notFoundViewAndExceptionModel;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NumberFormatException.class)
+    public ModelAndView badRequestError(Exception e){
+
+        ModelAndView badRequestViewAndExceptionModel = new ModelAndView();
+        badRequestViewAndExceptionModel.setViewName(BAD_REQUEST_400);
+        badRequestViewAndExceptionModel.addObject("exception", e);
+
+        return badRequestViewAndExceptionModel;
     }
 }

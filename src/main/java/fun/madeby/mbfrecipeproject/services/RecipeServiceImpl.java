@@ -9,6 +9,7 @@ import fun.madeby.mbfrecipeproject.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.util.*;
 
@@ -33,10 +34,10 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Recipe getRecipeById(Long aLong) {
+
         Optional<Recipe> recipeOptional = RECIPE_REPOSITORY.findById(aLong);
-        if (recipeOptional.isEmpty()) {
+        if (recipeOptional.isEmpty())
             throw new NotFoundException("Recipe ID " + aLong + " not found.");
-        }
         return recipeOptional.get();
     }
 
