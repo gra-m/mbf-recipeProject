@@ -1,6 +1,7 @@
 package fun.madeby.mbfrecipeproject.controllers;
 
 import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,8 +22,8 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(NumberFormatException.class)
     public ModelAndView numberFormatExceptionHandler(Exception e){
 
-        log.error("Handling number Format exception");
-        log.error(e.getMessage());
+//        log.error("Handling number Format exception");
+//        log.error(e.getMessage());
 
         ModelAndView badRequestViewAndExceptionModel = new ModelAndView();
         badRequestViewAndExceptionModel.setViewName(BAD_REQUEST_400);

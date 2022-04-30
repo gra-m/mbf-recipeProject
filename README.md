@@ -16,6 +16,7 @@ On: 28/03/2022
 * Exception Handling:
   * @ResponseStatus custom exception -> which HTTP status is thrown globally #78
   * @ExceptionHandler -> @Controller level #79
+* [Using command or 'form' objects](https://docs.spring.io/spring-framework/docs/2.0.8/reference/mvc.html)
 
 
 ### Project resources used or useful
@@ -27,6 +28,10 @@ On: 28/03/2022
 [Dillinger](https://dillinger.io "until you are off of visible page..")
 
 [RudeComment-PossInterestingRefactorExercise](https://github.com/Celebes/spring-boot-pet-clinic/blob/master/pet-clinic-data/src/main/java/guru/springframework/sfgpetclinic/services/jpa/AbstractJpaService.java)
+
+[DataValidation Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Bean_Validation_Cheat_Sheet.html)
+[@NotBlank Deprecated](https://hibernate.org/validator/documentation/)
+
 
 Table of Contents:
 

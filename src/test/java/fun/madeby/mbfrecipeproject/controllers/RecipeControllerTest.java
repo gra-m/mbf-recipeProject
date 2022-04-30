@@ -28,6 +28,7 @@ class RecipeControllerTest {
     private static final String BAD_REQUEST_400 = "400error";
     private static final String NOT_FOUND_404 = "404error";
     private static final String NUMBER_FORMAT_CAUSING_STRING = "asdfl;j";
+    private static final String RECIPE_FORM_URL = "recipe/recipe-form";
 
     @InjectMocks
     RecipeController controllerUnderTest;
@@ -98,25 +99,44 @@ class RecipeControllerTest {
     }
 
     @Test
-    void testPostNewRecipe() throws Exception {
-        // given this recipeCommand is what will be mock posted
+    @DisplayName("VALID Save or update recipe")
+    void testSaveOrUpdateRecipe() throws Exception {
+
         RecipeCommand recipeCommand = new RecipeCommand();
         recipeCommand.setId(4L);
         when(recipeService.saveRecipeCommand(any()))
                 .thenReturn(recipeCommand);
-        // when
+
         mockMvc.perform(MockMvcRequestBuilders.post("/recipe")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id", "")
-                .param("description", "some string"))
-        //then
+                .param("title", "some string")
+                .param("description", "some string")
+                .param("directions", "some string"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/4/show"));
     }
 
     @Test
+    @DisplayName("INVALID: Save or update recipe")
+    void testSaveOrUpdateRecipe_Fail() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/recipe")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                        .param("id", "")
+                        .param("title", "")
+                        .param("description", "")
+                        .param("prepTime", String.valueOf(0))
+                        .param("cookTime", String.valueOf(1000))
+                        .param("servings", String.valueOf(0))
+                        .param("directions", "   "))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("recipe"))
+                .andExpect(view().name(RECIPE_FORM_URL));
+    }
+
+    @Test
     void testGetUpdateView() throws Exception {
-        // given this recipeCommand is the recipe to be updated /recipe/5/update
         RecipeCommand recipeCommand = new RecipeCommand();
         recipeCommand.setId(6L);
 

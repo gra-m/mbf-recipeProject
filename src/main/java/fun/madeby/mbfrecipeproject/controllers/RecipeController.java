@@ -7,8 +7,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.validation.Valid;
 
 /**
  * Created by Gra_m on 2022 04 16
@@ -17,6 +20,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class RecipeController {
     private static final String NOT_FOUND_404 = "404error";
+    private static final String RECIPE_FORM_URL = "recipe/recipe-form";
     private final RecipeService RECIPE_SERVICE;
 
 
@@ -35,14 +39,14 @@ public class RecipeController {
     public String newRecipeForm(Model model) {
         log.debug("RC_GET_/recipe/new");
         model.addAttribute("recipe", new RecipeCommand());
-        return "recipe/recipe-form";
+        return RECIPE_FORM_URL;
     }
 
     @GetMapping("/recipe/{id}/update")
     public String getUpdateView(@PathVariable String id, Model model) {
         log.debug("RC_GET_/recipe/{id}/update");
         model.addAttribute("recipe", RECIPE_SERVICE.getRecipeCommandById(Long.valueOf(id)));
-        return "recipe/recipe-form";
+        return RECIPE_FORM_URL;
     }
 
     @GetMapping("recipe/{id}/delete")
@@ -53,11 +57,21 @@ public class RecipeController {
         return "redirect:/";
     }
 
+    /*Before test updated:
+    Added @Valid == Test Fails (CLIENT_ERROR)
+    Added BindingResult, so errors are available and can be iterated over*/
     @PostMapping("/recipe")
-    public String saveOrUpdateRecipe(@ModelAttribute RecipeCommand command) {
+    public String saveOrUpdateRecipe(@Valid @ModelAttribute("recipe") RecipeCommand command, BindingResult result) {
         log.debug("RC_POST_/recipe");
 
-        RecipeCommand savedRecipeCommand = RECIPE_SERVICE.saveRecipeCommand(command);
+        if(result.hasErrors()) {
+            log.debug("There are: " + result.getErrorCount() + " errors in the returned Recipe");
+            result.getAllErrors().forEach(recipeFieldErrorObj -> log.debug(recipeFieldErrorObj.toString()));
+            return RECIPE_FORM_URL;
+        }
+
+            RecipeCommand savedRecipeCommand = RECIPE_SERVICE.saveRecipeCommand(command);
+
         return "redirect:/recipe/" + savedRecipeCommand.getId() + "/show";
     }
 
