@@ -1,6 +1,7 @@
 package fun.madeby.mbfrecipeproject.controllers;
 
 import fun.madeby.mbfrecipeproject.commands.RecipeCommand;
+import fun.madeby.mbfrecipeproject.domain.Note;
 import fun.madeby.mbfrecipeproject.domain.Recipe;
 import fun.madeby.mbfrecipeproject.exceptions.NotFoundException;
 import fun.madeby.mbfrecipeproject.services.RecipeService;
@@ -120,6 +121,9 @@ class RecipeControllerTest {
     @Test
     @DisplayName("INVALID: Save or update recipe")
     void testSaveOrUpdateRecipe_Fail() throws Exception {
+        Note note = new Note();
+        note.setId(1L);
+        note.setRecipeNote("");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/recipe")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -129,7 +133,8 @@ class RecipeControllerTest {
                         .param("prepTime", String.valueOf(0))
                         .param("cookTime", String.valueOf(1000))
                         .param("servings", String.valueOf(0))
-                        .param("directions", "   "))
+                        .param("directions", "   ")
+                        .param("url", "asdfas://asdfasdfa"))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("recipe"))
                 .andExpect(view().name(RECIPE_FORM_URL));
