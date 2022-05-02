@@ -4,6 +4,7 @@ import fun.madeby.mbfrecipeproject.domain.Difficulty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -43,12 +44,17 @@ public class RecipeCommand {
     @NotBlank
     private String directions;
 
-    private String source;
+    @URL
     private String url;
+
+
+
+
+    private String source;
+    private NoteCommand note;
     private Difficulty difficulty;
     private Set<IngredientCommand> ingredients = new HashSet<>();
     private Byte[] image;
-    private NoteCommand note;
     private Set<CategoryCommand> categories = new HashSet<>();
 
 }

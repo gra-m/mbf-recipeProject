@@ -34,12 +34,37 @@
                         <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
                             <p>Please correct errors below</p>
                         </div>
+
                         <div class="row">
-                            <div class="col-sm-12 form-group">
-                                <label>Recipe Description:</label>
-                                <input type="text" class="form-control" th:field="*{description}"/>
+                            <div class="col-sm-12 form-group" th:class="${#fields.hasErrors('title')}
+                            ? 'col-sm-12 form-group has-error' : 'col-sm-12 form-group'">
+                                <label>Recipe Name:</label>
+                                <input type="text" class="form-control" th:field="*{title}"
+                                       th:errorclass="has-error"/>
+                                <span class="help-block is-invalid" th:if="${#fields.hasErrors('title')}">
+                                     <ul>
+                                <li th:each="err : ${#fields.errors('title')}" th:text="${err}"></li>
+                                    </ul>
+                                </span>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col-sm-12 form-group" th:class="${#fields.hasErrors('description')}
+                            ? 'col-sm-12 form-group has-error' : 'col-sm-12 form-group'">
+                                <label>Recipe Description/Intro:</label>
+                                <input type="text" class="form-control" th:field="*{description}"
+                                       th:errorclass="has-error"/>
+                                <span class="help-block is-invalid" th:if="${#fields.hasErrors('description')}">
+                                     <ul>
+                                <li th:each="err : ${#fields.errors('description')}" th:text="${err}"></li>
+                                    </ul>
+                                </span>
+                            </div>
+                        </div>
+
+
+
                         <div class="row">
                             <div class="col-sm-12 form-group">
                                 <label>Categories:</label>
@@ -60,14 +85,31 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-6 form-group">
+
+                            <div class="col-sm-6 form-group" th:class="${#fields.hasErrors('prepTime')}
+                            ? 'col-sm-6 form-group has-error' : 'col-sm-6 form-group'">
                                 <label>Prep Time:</label>
-                                <input type="text" class="form-control" th:field="*{prepTime}"/>
+                                <input type="text" class="form-control" th:field="*{prepTime}"
+                                       th:errorclass="has-error"/>
+                                <span class="help-block is-invalid" th:if="${#fields.hasErrors('prepTime')}">
+                                     <ul>
+                                <li th:each="err : ${#fields.errors('prepTime')}" th:text="${err}"></li>
+                                    </ul>
+                                </span>
                             </div>
-                            <div class="col-sm-6 form-group">
-                                <label>Cooktime:</label>
-                                <input type="text" class="form-control" th:field="*{cookTime}"/>
+
+                            <div class="col-sm-6 form-group" th:class="${#fields.hasErrors('cookTime')}
+                            ? 'col-sm-6 form-group has-error' : 'col-sm-6 form-group'">
+                                <label>Cook Time:</label>
+                                <input type="text" class="form-control" th:field="*{cookTime}"
+                                       th:errorclass="has-error"/>
+                                <span class="help-block is-invalid" th:if="${#fields.hasErrors('cookTime')}">
+                                     <ul>
+                                <li th:each="err : ${#fields.errors('cookTime')}" th:text="${err}"></li>
+                                    </ul>
+                                </span>
                             </div>
+
                         </div>
                         <div class="row">
                             <div class="col-sm-6 form-group">
@@ -78,28 +120,47 @@
                                     <option th:each="diffVal : ${T(fun.madeby.mbfrecipeproject.domain.Difficulty).values()}"
                                             th:value="${diffVal.name()}"
                                             th:text="${diffVal.label}"
-                                    >val</option>
+                                    >val
+                                    </option>
                                 </select>
-                                    <select class="form-control" th:remove="all">
+                                <select class="form-control" th:remove="all">
                                     <option>Easy</option>
                                     <option>Medium</option>
                                     <option>Hard</option>
                                 </select>
                             </div>
-                            <div class="col-sm-6 form-group">
+
+
+                            <div class="col-sm-6 form-group" th:class="${#fields.hasErrors('servings')}
+                            ? 'col-sm-6 form-group has-error' : 'col-sm-6 form-group'">
                                 <label>Servings:</label>
-                                <input type="text" class="form-control" th:field="*{servings}"/>
+                                <input type="text" class="form-control" th:field="*{servings}"
+                                       th:errorclass="has-error"/>
+                                <span class="help-block is-invalid" th:if="${#fields.hasErrors('servings')}">
+                                     <ul>
+                                <li th:each="err : ${#fields.errors('servings')}" th:text="${err}"></li>
+                                    </ul>
+                                </span>
                             </div>
+
                         </div>
                         <div class="row">
                             <div class="form-group">
                                 <label>Source:</label>
                                 <input type="text" class="form-control" th:field="*{source}"/>
                             </div>
-                            <div class="form-group">
+
+                            <div class="form-group" th:class="${#fields.hasErrors('url')}
+                            ? 'form-group has-error' : 'form-group'">
                                 <label>URL:</label>
-                                <input type="text" class="form-control" th:field="*{url}"/>
+                                <input type="text" class="form-control" th:field="*{url}" th:errorclass="has-error"/>
+                                <span class="help-block is-invalid" th:if="${#fields.hasErrors('url')}">
+                                     <ul>
+                                <li th:each="err : ${#fields.errors('url')}" th:text="${err}"></li>
+                                    </ul>
+                                </span>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -117,14 +178,16 @@
                                 <div class="btn-group col-md-8 m-md-auto" role="group">
 
                                     <div class="row col-md-12">
-                                    <a class="btn-sm btn-secondary col-md-4 m-auto" type="button" href="#" style="text-decoration:none; text-align:center;"
-                                       th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}">Edit</a>
-                                    <a class="btn-sm btn-secondary col-md-4 m-auto" type="button" href="#" style="text-decoration:none; text-align:center;"
-                                       th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/new'}">New</a>
-                                        </div>
-
-
+                                        <a class="btn-sm btn-secondary col-md-4 m-auto" type="button" href="#"
+                                           style="text-decoration:none; text-align:center;"
+                                           th:href="@{'/recipe/' + ${recipe.id} + '/ingredients'}">Edit</a>
+                                        <a class="btn-sm btn-secondary col-md-4 m-auto" type="button" href="#"
+                                           style="text-decoration:none; text-align:center;"
+                                           th:href="@{'/recipe/' + ${recipe.id} + '/ingredient/new'}">New</a>
                                     </div>
+
+
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -149,9 +212,19 @@
                     <div class="card-body">
                         <h1 class="card-title">Directions</h1>
                         <div class="row">
-                            <div class="col-md-12 form-group">
-                                <textarea class="form-control" rows="3" th:field="*{directions}"></textarea></div>
+
+                            <div class="col-md-12 form-group" th:class="${#fields.hasErrors('directions')}
+                            ? 'col-md-12 form-group has-error' : 'col-md-12 form-group'">
+                                <textarea class="form-control" rows="3" th:field="*{directions}"
+                                          th:errorclass="has-error"></textarea>
+                            </div>
+                            <span class="help-block is-invalid" th:if="${#fields.hasErrors('directions')}">
+                                     <ul>
+                                <li th:each="err : ${#fields.errors('directions')}" th:text="${err}"></li>
+                                    </ul>
+                                </span>
                         </div>
+
                     </div>
                 </div>
             </section>
@@ -161,11 +234,27 @@
                     <div class="card-body">
                         <h1 class="card-title">Notes</h1>
                         <div class="row">
-                            <div class="col-md-12 form-group">
+
+                            <div class="col-md-12 form-group" th:class="${#fields.hasErrors('note.recipeNote')}
+                            ? 'col-md-12 form-group has-error' : 'col-md-12 form-group'">
+                                <textarea class="form-control" rows="3" th:field="*{note.recipeNote}"
+                                          th:errorclass="has-error"></textarea>
+                            </div>
+                            <span class="help-block is-invalid" th:if="${#fields.hasErrors('note.recipeNote')}">
+                                     <ul>
+                                <li th:each="err : ${#fields.errors('note.recipeNote')}" th:text="${err}"></li>
+                                    </ul>
+                                </span>
+                       <!--     <div class="col-md-12 form-group">
 
                                 <textarea class="form-control" rows="3" th:field="*{note.recipeNote}"></textarea>
-                            </div>
+                            </div>-->
+
+
                         </div>
+
+
+
                         <div class="row col-sm-6 m-sm-auto">
                             <button type="submit" class="btn btn-primary col-md-12">Submit</button>
                         </div>
