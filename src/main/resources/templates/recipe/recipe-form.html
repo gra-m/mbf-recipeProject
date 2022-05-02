@@ -31,6 +31,9 @@
                 <div class="card">
                     <div class="card-body">
                         <h1 class="card-title">Add/Edit Recipe Information</h1>
+                        <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger">
+                            <p>Please correct errors below</p>
+                        </div>
                         <div class="row">
                             <div class="col-sm-12 form-group">
                                 <label>Recipe Description:</label>
