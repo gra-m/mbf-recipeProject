@@ -45,9 +45,6 @@ class ImageServiceImplTest {
     void getImages() {
     }
 
-    @Test
-    void getImageById() {
-    }
 
     @Test
     void testSaveImage() throws IOException {
@@ -67,6 +64,13 @@ class ImageServiceImplTest {
         Recipe savedRecipe = argumentCaptor.getValue();
         assertEquals(multipartFile.getBytes().length, savedRecipe.getImage().length);
     }
+
+
+    @Test
+    void getImageById() {
+        
+    }
+
 
     @Test
     void deleteImageById() {

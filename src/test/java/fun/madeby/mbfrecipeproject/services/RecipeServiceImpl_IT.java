@@ -15,7 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@RunWith(SpringRunner.class)
+//Already tagged with @ExtendWith @Juint5
+//@RunWith(SpringRunner.class)//not required
 @SpringBootTest
 class RecipeServiceImpl_IT {
 
