@@ -1,4 +1,4 @@
-# Current commit status:
+# Current commit status: [![CircleCI](https://circleci.com/gh/gra-m/mbf-recipeProject/tree/main.svg?style=svg)](https://circleci.com/gh/gra-m/mbf-recipeProject/tree/main)
 
 # Spring 5 Spring Guru Recipe Project 
 Following the course, updating where needed but not coding along to video. Once a
