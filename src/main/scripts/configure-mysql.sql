@@ -2,11 +2,11 @@
 #docker run --name mysqldb -p 3306:3306 -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -d mysql
 
 # connect to mysql and run as root users
-#Create Databases
+#Create Database Schemas
 CREATE DATABASE mbf_dev;
 CREATE DATABASE mbf_prod;
 
-#Create database service accounts
+#Create database service accounts (No Root access)
 CREATE USER 'mbf_dev_user'@'localhost' IDENTIFIED BY 'gram';
 CREATE USER 'mbf_prod_user'@'localhost' IDENTIFIED BY 'gram';
 
